@@ -9,7 +9,7 @@ More basic features are in place now, searching TMDB, adding an dmodifying data 
 ![Stable](https://img.shields.io/badge/Status-Stable-blue.svg)
 ![License - MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-[Demo](http://movies-collection.herokuapp.com/){:target="_blank"} | [Demo](http://mcm.remelehane.me/){:target="_blank"}
+[Demo](http://movies-collection.herokuapp.com/) | [Demo](http://mcm.remelehane.me/)
 
 ## Dependancies
 * Node.JS v12.X
