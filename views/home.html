@@ -1,0 +1,36 @@
+{% if movies.length == 0%}
+No results
+{% endif %}
+
+<div class="mdl-grid home-grid">
+	{% for movie in movies %}
+	<div class="mdl-card mdl-shadow--2dp mdl-grid mdl-cell--3-col movie-home-card">
+
+		<div class="img mdl-cell mdl-cell--4-col">
+		{% if movie.poster_path %}
+			<img src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
+		{% endif %}	
+
+		{% if !movie.poster_path %}
+			<img src="/images/placeholder-thumb.png" width="92" height="138" />
+		{% endif %}
+		</div>
+
+		<div class="content mdl-cell mdl-cell--8-col">
+			<div class="mdl-card__title">
+			  <h2 class="mdl-card__title-text">{{ movie.title }}</h2>
+			</div>
+			<div class="mdl-card__supporting-text">
+			{{ movie.tagline }} ({{ movie.release_date | date('Y-m-d') }})		</div>
+		</div>
+
+		<div class="cta">
+			<a 	class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
+				href="/movie-details/{{ movie.id }}">
+			  <i class="material-icons">info</i>
+			</a>
+		</div>
+
+	</div>
+	{% endfor %}
+</div>

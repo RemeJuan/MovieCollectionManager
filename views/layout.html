@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>My Movie Collection</title>
+	
+	{% block head %}
+
+	<!-- Custom CSS -->
+	<link href="/stylesheets/material.min.css" rel="stylesheet">
+	<link href="/stylesheets/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+	{% endblock %}
+</head>
+
+<body>
+	<div id="container">
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+	  <header class="mdl-layout__header">
+	    <div class="mdl-layout__header-row">
+	      <!-- Title -->
+	      <span class="mdl-layout-title">My Movie Collection</span>
+	      <!-- Add spacer, to align navigation to the right -->
+	      <div class="mdl-layout-spacer"></div>
+	      <!-- Navigation. We hide it in small screens. -->
+	      {% if searchable %}
+	      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+	                  mdl-textfield--floating-label mdl-textfield--align-right">
+	        <label class="mdl-button mdl-js-button mdl-button--icon"
+	               for="waterfall-exp">
+	          <i class="material-icons">search</i>
+	        </label>
+	        <div class="mdl-textfield__expandable-holder">
+	        <form id="movie-search" name="movie-search" method="post">
+	          <input class="mdl-textfield__input" type="text" name="search" id="waterfall-exp" />
+	        </form>
+	        </div>
+	      </div>
+	      {% endif %}
+	      {% include 'navigation.html' %}
+	    </div>
+	  </header>
+
+	  <div class="mdl-layout__drawer">
+	    <span class="mdl-layout-title">My Movie Collection</span>
+	    {% include 'navigation.html' %}
+	  </div>
+	  <main class="mdl-layout__content">
+	    <div class="page-content">
+	    	{% block content %}{% endblock %}
+	    </div>
+	  </main>
+	</div>
+	</div>
+</body>
+
+{% block scripts %}
+<script type="text/javascript" src="/javascripts/plugins/material.min.js"></script>
+{% endblock %}
+
+</html>

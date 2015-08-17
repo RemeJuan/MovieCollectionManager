@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+	{% if homeView %}
+	    {% include 'home.html' %}
+	{% endif %}
+
+	{% if searchView %}
+	    {% include 'list-view.html' %}
+	{% endif %}
+
+	{% if detailsView %}
+	    {% include 'detail-view.html' %}
+	{% endif %}
+	
+{% endblock %}

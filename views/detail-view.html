@@ -1,0 +1,124 @@
+<div class="mdl-card mdl-shadow--2dp mdl-grid movie-search-card">
+{{ error }}
+	<div class="img mdl-cell mdl-cell--4-col">
+	{% if movie.poster_path %}
+		<img src="http://image.tmdb.org/t/p/w342{{movie.poster_path}}" width="342" height="513" />
+	{% endif %}	
+
+	{% if !movie.poster_path %}
+		<img src="/images/placeholder-full.png" width="342" height="513" />
+	{% endif %}
+	</div>
+
+	<form id="single-movie" name="single-movie" method="post" class="content mdl-cell mdl-cell--8-col">
+		<div class="mdl-card__title">
+		  <h2 class="mdl-card__title-text">
+			  {{ movie.title }} 
+			  <small class="small-heading">{{ movie.tagline }} ({{ movie.release_date | date('Y') }})</small>
+		  </h2>
+		</div>
+
+		<div class="mdl-card__supporting-text movie-details">
+		  	<p>
+		  	<small>
+		  		Genres: 
+		  		{% for genre in movie.genres %}
+		  			{{genre.name}}
+		  		{% endfor %}
+		  		| Runtime: {{ movie.runtime }} min
+		  		| Rating: {{ movie.vote_average }} from {{ movie.vote_count }} votes
+		  	</small>
+
+		  	{{ movie.overview }}
+
+		  	</p>
+
+		  	<p>
+		  	<a href="{{ movie.homepage }}" target="_blank">Movie Website</a>
+		  	<br>
+		  	<a href="https://www.themoviedb.org/movie/{{ movie.id }}" target="_blank">TMDB</a>
+		  	<br>
+		  	<a href="http://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">IMDB</a>
+		  	</p>
+		</div>
+
+		<div class="mdl-card__supporting-text collection-details">
+			<h2 class="mdl-card__title-text">Collection Details</h2>
+			{% if !inCollection or editable %}
+			<div class="mdl-textfield mdl-js-textfield">
+				<label for="collection-location">Location:</label>
+				<select id="collection-location" name="collection_location" class="mdl-textfield__input" required>
+					<option {% if !movie.collection_location %} selected {% endif %}></option>
+					<option value="Media Server" {% if movie.collection_location == 'Media Server' %} selected {% endif %}>Media Server</option>
+					<option value="Folder 1" {% if movie.collection_location == 'Folder 1' %} selected {% endif %}>Folder 1</option>
+					<option value="Folder 2" {% if movie.collection_location == 'Folder 2' %} selected {% endif %}>Folder 2</option>
+				</select>
+			</div>
+
+			<div class="mdl-textfield mdl-js-textfield">
+				<label for="collection-quality">Quality:</label>
+				<select id="collection-quality" name="collection_quality" class="mdl-textfield__input" required>
+					<option {% if !movie.collection_quality %} selected {% endif %}></option>
+					<option value="1080p" {% if movie.collection_quality == '1080p' %} selected {% endif %}>1080p</option>
+					<option value="720p" {% if movie.collection_quality == '720p' %} selected {% endif %}>720p</option>
+					<option value="480p" {% if movie.collection_quality == '480p' %} selected {% endif %}>480p</option>
+					<option value="SD" {% if movie.collection_quality == 'SD' %} selected {% endif %}>SD</option>
+				</select>
+			</div>
+
+			<div class="mdl-textfield mdl-js-textfield">
+				<label for="collection-media">Media Type:</label>
+				<select id="collection-media" name="collection_media" class="mdl-textfield__input" required>
+					<option {% if !movie.collection_media %} selected {% endif %}></option>
+					<option value="Blu-ray" {% if movie.collection_media == 'Blu-ray' %} selected {% endif %}>Blu-ray</option>
+					<option value="DVD" {% if movie.collection_media == 'DVD' %} selected {% endif %}>DVD</option>
+					<option value="Web-Rip" {% if movie.collection_media == 'Web-Rip' %} selected {% endif %}>Web-Rip</option>
+				</select>
+			</div>
+
+			{% else %}
+			<div class="mdl-textfield mdl-js-textfield">
+				<label for="collection-location">Location:</label> {{ movie.collection_location }}
+			</div>
+			<div class="mdl-textfield mdl-js-textfield">
+				<label for="collection-location">Quality:</label> {{ movie.collection_quality }}
+			</div>
+			<div class="mdl-textfield mdl-js-textfield">
+				<label for="collection-location">Media Type:</label> {{ movie.collection_media }}
+			</div>
+			{% endif %}
+		</div>
+
+		<div class="cta">
+		{% if !inCollection %}
+			<button id="add-to-collection" type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+			  <i class="material-icons">add</i>
+			</button>
+			<div class="mdl-tooltip" for="add-to-collection">
+				Add to collection
+			</div>
+		{% elseif editable %}
+			<button id="add-to-collection" type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+			  <i class="material-icons">save</i>
+			</button>
+			<div class="mdl-tooltip" for="add-to-collection">
+				Update this title
+			</div>
+
+			<a id="edit-cancel" href="/movie-details/{{ movie.id }}" class="mdl-button mdl-js-button mdl-button--fab mdl-button">
+			  <i class="material-icons">cancel</i>
+			</a>
+			<div class="mdl-tooltip" for="edit-cancel">
+				Cancel
+			</div>
+		{% else %}
+			<a id="edit-in-collection" href="/movie-details/{{ movie.id }}/edit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+			  <i class="material-icons">edit</i>
+			</a>
+			<div class="mdl-tooltip" for="edit-in-collection">
+				Edit this title
+			</div>
+		{% endif %}
+		</div>
+	</form>
+</div>
