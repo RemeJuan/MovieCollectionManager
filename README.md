@@ -18,19 +18,22 @@ More basic features are in place now, searching TMDB, adding an dmodifying data 
 ## Setup details
 
 Clone repo
+
 run:
 `npm install` from comman-line
 
 To Launch:
+
 Ensure Mongo is running
+
 `npm start`
 
 ## Features
-Search TMDB for movies
-Add Movies to your collection
-Update own detail from within collection
+* Search TMDB for movies
+* Add Movies to your collection
+* Update own detail from within collection
 
 ## Change Log
 
-v0.1.0
-Initial
+v0.1.0:
+* Initial
