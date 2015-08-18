@@ -35,5 +35,9 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.2.0
+* New Home screen
+* Better distinction and seperation of user data and TMDB data.
+
 v0.1.0:
 * Initial
