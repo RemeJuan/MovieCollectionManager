@@ -15,11 +15,11 @@ No results
 
 	<div class="img mdl-cell mdl-cell--1-col">
 		<a href="/movie-details/{{ movie.id }}">
-			{% if movie.poster_path %}
+			{% if movie.local_thumb %}
+				<img src="/images/w92{{movie.poster_path}}" width="92" height="138" />
+			{% elseif movie.poster_path %}
 				<img src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
-			{% endif %}	
-
-			{% if !movie.poster_path %}
+			{% else %}	
 				<img src="/images/placeholder-thumb.png" width="92" height="138" />
 			{% endif %}
 		</a>

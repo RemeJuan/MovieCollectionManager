@@ -34,16 +34,16 @@ No results
 	{% for movie in movies %}
 	<div class="mdl-cell mdl-cell--1-col">
 			<a href="/movie-details/{{ movie.id }}">
-				{% if movie.poster_path %}
+				{% if movie.local_thumb %}
+					<img id="movie-{{ movie.id }}" src="/images/w92{{movie.poster_path}}" width="92" height="138" />
+				{% elseif movie.poster_path %}
 					<img id="movie-{{ movie.id }}" src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
-				{% endif %}	
-
-				{% if !movie.poster_path %}
+				{% else %}	
 					<img src="/images/placeholder-thumb.png" width="92" height="138" />
 				{% endif %}
 			</a>
 			<div class="mdl-tooltip" for="movie-{{ movie.id }}">
-				{{ movie.title }}
+				{{ movie.title }} {{ movie.local_thumb }}
 			</div>
 	</div>
 	{% endfor %}

@@ -35,6 +35,10 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.4.0:
+* Images for movies are now automatically download
+* If a collection title's image has been downloaded the local one will be loaded instead of TMDB's
+
 v0.3.0:
 * Added localisation of all language keys
 * Enhanced views

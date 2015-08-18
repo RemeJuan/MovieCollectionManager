@@ -30,6 +30,14 @@ var movieSchema = new Schema({
     created_date        : {
         type: Date,
         default: Date.now
+    },
+    local_img           : {
+        type: Boolean,
+        default: false
+    },
+    local_thumb         : {
+        type: Boolean,
+        default: false
     }
 });
 
