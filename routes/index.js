@@ -3,6 +3,7 @@ var router = express.Router();
 var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
 var http = require('http');
 var moviesService = require('../services/movies-service');
+var locale = require('../locale/en_gb');
 
 var movieData, location;
 
@@ -12,6 +13,7 @@ router.route('/')
 	moviesService.getAllMovies({}, function (aError, aMovies) {
 		return aResponse.render('index', {
 			homeView: true,
+			lang: locale,
 			movies : aMovies
 		});
 	});
@@ -29,6 +31,7 @@ router.route('/collection')
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,
+			lang: locale,
 			movies : aMovies
 		});
 	});
@@ -49,6 +52,7 @@ router.route('/movie-details/:id')
 				movieData = aResults;
 				return aResponse.render('index', {
 					detailsView: true,
+					lang: locale,
 					movie : aResults
 				});
 			});
@@ -56,6 +60,7 @@ router.route('/movie-details/:id')
 			return aResponse.render('index', {
 				detailsView: true,
 				inCollection: true,
+				lang: locale,
 				movie : aResults
 			});
 		}
@@ -65,15 +70,15 @@ router.route('/movie-details/:id')
 .post(function (aRequest, aResponse) {
 	moviesService.addMovie(movieData, aRequest.body, function (aError, aMovie) {
 		if (aError) {
-			console.log(aError);
 			return aResponse.render('index', {
 				detailsView: true,
 				movie: movieData,
+				lang: locale,
 				error: aError
 			});
 		}
 
-		return aResponse.redirect('/movie-details/' + movieData.id);
+		return aResponse.redirect('/movie-details/' + aRequest.params.id);
 	});
 });
 
@@ -85,6 +90,7 @@ router.route('/movie-details/:id/edit')
 			detailsView: true,
 			inCollection: true,
 			editable: true,
+			lang: locale,
 			movie: aResults
 		});
 	});
@@ -96,6 +102,7 @@ router.route('/movie-details/:id/edit')
 				detailsView: true,
 				inCollection: true,
 				editable: true,
+				lang: locale,
 				movie: aResults
 			});
 		}
@@ -112,6 +119,7 @@ router.route('/delete/:id')
 				detailsView: true,
 				inCollection: true,
 				editable: true,
+				lang: locale,
 				movie: aResults,
 				error: aError
 			});
@@ -130,6 +138,7 @@ router.route('/search-results/:location/:search')
 		  	searchView: true,
 		  	searchable: true,
 		  	searchResults: true,
+		  	lang: locale,
 		  	movies : aResults.results
 		  });
 		});
@@ -139,6 +148,7 @@ router.route('/search-results/:location/:search')
 				console.log(aError);
 				return aResponse.render('index', {
 					detailsView: true,
+					lang: locale,
 					movie: movieData,
 					error: aError
 				});
@@ -148,6 +158,7 @@ router.route('/search-results/:location/:search')
 				searchView: true,
 				searchable: true,
 				searchResults: true,
+				lang: locale,
 				movies : aResults
 			});
 		});

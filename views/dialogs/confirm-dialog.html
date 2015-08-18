@@ -1,0 +1,15 @@
+<div id="modal-dialog" class="md-dialog-container">
+	<div class="md-dialog md-default-theme">
+		<div class="md-content md-default-theme">
+			<h2 id="modal-heading" class="mdl-card__title-text">Delete item from collection?</h2>
+			<div class="mdl-card__supporting-text">
+				<p id="modal-body">Are you sure you want to delete <b>{{ movie.title }}</b>?</p>
+			</div>
+		</div>
+
+		<div class="md-actions">
+			<button id="modal-cancel" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Cancel</button>
+			<a id="modal-confirm" href="/delete/{{ movie.id }}" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Delete</a>
+		</div>
+	</div>
+</div>

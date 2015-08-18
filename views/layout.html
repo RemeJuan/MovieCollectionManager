@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="author" content="">
-	<title>My Movie Collection</title>
+	<title>{{ lang.global.siteName }}</title>
 	
 	{% block head %}
 
@@ -25,7 +25,7 @@
 	  <header class="mdl-layout__header">
 	    <div class="mdl-layout__header-row">
 	      <!-- Title -->
-	      <span class="mdl-layout-title">My Movie Collection</span>
+	      <span class="mdl-layout-title">{{ lang.global.siteName }}</span>
 	      <!-- Add spacer, to align navigation to the right -->
 	      <div class="mdl-layout-spacer"></div>
 	      <!-- Navigation. We hide it in small screens. -->
@@ -38,7 +38,7 @@
 	        </label>
 	        <div class="mdl-textfield__expandable-holder">
 	        <form id="movie-search" name="movie-search" method="post">
-	          <input class="mdl-textfield__input" type="text" name="search" id="waterfall-exp" placeholder="Search Collection" />
+	          <input class="mdl-textfield__input" type="text" name="search" id="waterfall-exp" placeholder="{{ lang.global.searchCollection }}" />
 	        </form>
 	        </div>
 	      </div>
@@ -48,7 +48,7 @@
 	  </header>
 
 	  <div class="mdl-layout__drawer">
-	    <span class="mdl-layout-title">My Movie Collection</span>
+	    <span class="mdl-layout-title">{{ lang.global.siteName }}</span>
 	    {% include 'navigation.html' %}
 	  </div>
 	  <main class="mdl-layout__content">
@@ -58,10 +58,13 @@
 	  </main>
 	</div>
 	</div>
+	{% include 'dialogs/confirm-dialog.html' %}
 </body>
 
 {% block scripts %}
 <script type="text/javascript" src="/javascripts/plugins/material.min.js"></script>
+<script type="text/javascript" src="/javascripts/plugins/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="/javascripts/scripts.js"></script>
 {% endblock %}
 
 </html>

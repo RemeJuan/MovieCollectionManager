@@ -35,6 +35,12 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.3.0:
+* Added localisation of all language keys
+* Enhanced views
+* Changed details view to now use a manu for its main options
+* Delete items from your collection
+
 v0.2.0
 * New Home screen
 * Better distinction and seperation of user data and TMDB data.

@@ -21,12 +21,12 @@
 		<div class="mdl-card__supporting-text movie-details">
 		  	<p>
 		  	<small>
-		  		Genres: 
+		  		{{ lang.detailsView.labels.genres }}: 
 		  		{% for genre in movie.genres %}
 		  			{{genre.name}}
 		  		{% endfor %}
-		  		| Runtime: {{ movie.runtime }} min
-		  		| Rating: {{ movie.vote_average }} from {{ movie.vote_count }} votes
+		  		| {{ lang.detailsView.labels.runtime }}: {{ movie.runtime }} min
+		  		| {{ lang.detailsView.labels.location }}: {{ movie.vote_average }} {{ lang.detailsView.labels.from }} {{ movie.vote_count }} {{ lang.detailsView.labels.votes }}
 		  	</small>
 
 		  	{{ movie.overview }}
@@ -34,52 +34,30 @@
 		  	</p>
 
 		  	<p>
-		  	<a href="{{ movie.homepage }}" target="_blank">Movie Website</a>
+		  	<a href="{{ movie.homepage }}" target="_blank">{{ lang.detailsView.links.movieSite }}</a>
 		  	<br>
-		  	<a href="https://www.themoviedb.org/movie/{{ movie.id }}" target="_blank">TMDB</a>
+		  	<a href="https://www.themoviedb.org/movie/{{ movie.id }}" target="_blank">{{ lang.detailsView.links.tmdbSite }}</a>
 		  	<br>
-		  	<a href="http://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">IMDB</a>
+		  	<a href="http://www.imdb.com/title/{{ movie.imdb_id }}" target="_blank">{{ lang.detailsView.links.imdbSite }}</a>
 		  	</p>
 		</div>
 
 		{% include 'collection-details.html' %}
 
 		<div class="cta">
+		<div id="menu" class="flyout-menu">
 		{% if !inCollection %}
-			<button id="add-to-collection" type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-			  <i class="material-icons">add</i>
-			</button>
-			<div class="mdl-tooltip" for="add-to-collection">
-				Add to collection
-			</div>
+			{% include 'buttons/add-button.html' %}
 		{% elseif editable %}
-			<a id="delete-from-collection" href="/delete/{{ movie.id }}" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-			  <i class="material-icons">delete</i>
-			</a>
-			<div class="mdl-tooltip" for="delete-from-collection">
-				Delete this title
-			</div>
-			<button id="add-to-collection" type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-			  <i class="material-icons">save</i>
-			</button>
-			<div class="mdl-tooltip" for="add-to-collection">
-				Update this title
-			</div>
-
-			<a id="edit-cancel" href="/movie-details/{{ movie.id }}" class="mdl-button mdl-js-button mdl-button--fab mdl-button">
-			  <i class="material-icons">cancel</i>
-			</a>
-			<div class="mdl-tooltip" for="edit-cancel">
-				Cancel
-			</div>
+			{% include 'buttons/save-button.html' %}
+			{% include 'buttons/delete-button.html' %}
+			{% include 'buttons/cancel-button.html' %}
 		{% else %}
-			<a id="edit-in-collection" href="/movie-details/{{ movie.id }}/edit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-			  <i class="material-icons">edit</i>
-			</a>
-			<div class="mdl-tooltip" for="edit-in-collection">
-				Edit this title
-			</div>
+		{% include 'buttons/delete-button.html' %}
+			{% include 'buttons/edit-button.html' %}
 		{% endif %}
+		</div>
+			{% include 'buttons/menu-button.html' %}
 		</div>
 	</form>
 </div>
