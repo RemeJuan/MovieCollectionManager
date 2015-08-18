@@ -23,7 +23,7 @@ exports.addMovie = function(aMovie, aForm, aNext) {
     });
 
     newMovie.save(function(aError) {
-        if (err) {
+        if (aError) {
             return aNext(aError);
         }
         aNext(null);
@@ -81,7 +81,7 @@ exports.findMovie = function(aMovie, aNext) {
 
 exports.deleteTitle = function (aMovie, aNext) {
     Movie.findOneAndRemove({
-        e_id: aMovie
+        _id: aMovie
     }, function(aError) {
         aNext(aError);
     });
