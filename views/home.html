@@ -30,37 +30,21 @@ No results
 	</div>
 </div>
 
-{% for movie in movies %}
-<div class="mdl-card mdl-shadow--2dp mdl-grid movie-home-card">
+<div class="mdl-grid latest-entries">
+	{% for movie in movies %}
+	<div class="mdl-cell mdl-cell--1-col">
+			<a href="/movie-details/{{ movie.id }}">
+				{% if movie.poster_path %}
+					<img id="movie-{{ movie.id }}" src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
+				{% endif %}	
 
-	<div class="img mdl-cell mdl-cell--3-col">
-		<a href="/movie-details/{{ movie.id }}">
-			{% if movie.poster_path %}
-				<img src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
-			{% endif %}	
-
-			{% if !movie.poster_path %}
-				<img src="/images/placeholder-thumb.png" width="92" height="138" />
-			{% endif %}
-		</a>
+				{% if !movie.poster_path %}
+					<img src="/images/placeholder-thumb.png" width="92" height="138" />
+				{% endif %}
+			</a>
+			<div class="mdl-tooltip" for="movie-{{ movie.id }}">
+				{{ movie.title }}
+			</div>
 	</div>
-
-	<div class="content mdl-cell mdl-cell--9-col">
-		<div class="mdl-card__title">
-			<a href="/movie-details/{{ movie.id }}" class="heading-link">
-		  		<h2 class="mdl-card__title-text">{{ movie.title }}</h2>
-		  	</a>
-		</div>
-
-		<div class="mdl-card__supporting-text">
-		  {{ movie.overview }}
-		</div>
-	</div>
-	<div class="cta">
-		<a 	class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
-			href="/movie-details/{{ movie.id }}">
-		  <i class="material-icons">info</i>
-		</a>
-	</div>
+	{% endfor %}
 </div>
-{% endfor %}
