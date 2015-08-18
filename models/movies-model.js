@@ -19,6 +19,14 @@ var movieSchema = new Schema({
     collection_location : {type: String},
     collection_quality  : {type: String},
     collection_media    : {type: String},
+    collection_watched  : {
+        type Boolean,
+        default: false
+    },
+    collection_rating   : {
+        type: Number,
+        default: 0
+    },
     created_date        : {
         type: Date,
         default: Date.now

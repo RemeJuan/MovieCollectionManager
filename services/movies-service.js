@@ -17,7 +17,9 @@ exports.addMovie = function(aMovie, aForm, aNext) {
         poster_path         : aMovie.poster_path,
         collection_location : aForm.collection_location,
         collection_quality  : aForm.collection_quality,
-        collection_media    : aForm.collection_media
+        collection_media    : aForm.collection_media,
+        collection_watched  : aForm.collection_watched,
+        collection_rating   : aForm.collection_rating
     });
 
     newMovie.save(function(aError) {
