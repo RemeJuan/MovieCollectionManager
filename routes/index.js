@@ -104,6 +104,23 @@ router.route('/movie-details/:id/edit')
 	})
 });
 
+router.route('/delete/:id')
+.get(function (aRequest, aResponse) {
+	moviesService.deleteTitle(aRequest.params.id, function (aError) {
+		if (aError) {
+			return aResponse.render('index', {
+				detailsView: true,
+				inCollection: true,
+				editable: true,
+				movie: aResults,
+				error: aError
+			});
+		}
+
+		return aResponse.redirect('/collection');
+	});
+});
+
 router.route('/search-results/:location/:search')
 .get(function (aRequest, aResponse) {
 	location = aRequest.params.location;
