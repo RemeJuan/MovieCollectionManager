@@ -1,11 +1,11 @@
 <div class="mdl-card mdl-shadow--2dp mdl-grid movie-search-card">
 {{ error }}
 	<div class="img mdl-cell mdl-cell--4-col">
-	{% if movie.poster_path %}
+	{% if movie.local_img %}
+		<img src="/images/w342{{movie.poster_path}}" width="342" height="513" />
+	{% elseif movie.poster_path %}
 		<img src="http://image.tmdb.org/t/p/w342{{movie.poster_path}}" width="342" height="513" />
-	{% endif %}	
-
-	{% if !movie.poster_path %}
+	{% else %}	
 		<img src="/images/placeholder-full.png" width="342" height="513" />
 	{% endif %}
 	</div>

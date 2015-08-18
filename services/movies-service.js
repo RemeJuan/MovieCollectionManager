@@ -34,7 +34,7 @@ exports.getAllMovies = function(aMovies, aNext) {
     Movie.find({
         
     },
-        'poster_path title overview id',
+        'poster_path title overview id local_thumb',
     {
         sort: {date: -1},
         limit: 5
@@ -48,7 +48,7 @@ exports.getAllMoviesCollection = function(aMovies, aNext) {
     Movie.find({
         
     },
-        'poster_path title overview id',
+        'poster_path title overview id local_thumb',
     {
         sort: {title: 1},
         limit: 20
@@ -62,7 +62,7 @@ exports.searchCollection = function (movieTitle, aNext) {
     Movie.find({
         title: {'$regex': movieTitle}
     },
-        'poster_path title overview id',
+        'poster_path title overview id local_thumb',
     {
         sort: {title: 1},
         limit: 20
@@ -88,13 +88,34 @@ exports.deleteTitle = function (aMovie, aNext) {
 };
 
 exports.updateMovie = function(aMovie, aData, aNext) {
-    console.log(aData);
     Movie.update({_id: aMovie}, {
         collection_location : aData.collection_location,
         collection_quality  : aData.collection_quality,
         collection_media    : aData.collection_media,
         collection_rating   : aData.collection_rating,
         collection_watched  : aData.collection_watched
+    }, function(aError, numberAffected, rawResponse, aData) {
+       if (aError) {
+           return aNext(aError);
+       }
+       aNext(null, aData);
+    });
+};
+
+exports.updateImg = function(aMovie, aNext) {
+    Movie.update({_id: aMovie}, {
+        local_img : true,
+    }, function(aError, numberAffected, rawResponse, aData) {
+       if (aError) {
+           return aNext(aError);
+       }
+       aNext(null, aData);
+    });
+};
+
+exports.updateThumb = function(aMovie, aNext) {
+    Movie.update({_id: aMovie}, {
+        local_thumb : true,
     }, function(aError, numberAffected, rawResponse, aData) {
        if (aError) {
            return aNext(aError);

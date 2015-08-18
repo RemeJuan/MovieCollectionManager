@@ -4,8 +4,11 @@ var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
 var http = require('http');
 var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
+var downloader = require('downloader');
 
-var movieData, location;
+var movieData, location,
+	imgDir = 'public/images/w342/',
+	thumbDir = 'public/images/w92/';
 
 /* GET home page. */
 router.route('/')
@@ -47,6 +50,21 @@ router.route('/movie-details/:id')
 .get(function (aRequest, aResponse) {
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
 		movieData = aResults;
+
+		if(!movieData.local_img) {
+			downloader.download('http://image.tmdb.org/t/p/w342' + movieData.poster_path, imgDir);
+			downloader.on('done', function (aResponse) {
+				moviesService.updateImg(aRequest.params.id, function (aError, aResults) {});
+			});
+		}
+
+		if (!movieData.local_thumb) {
+			downloader.download('http://image.tmdb.org/t/p/w92' + movieData.poster_path, thumbDir);
+			downloader.on('done', function (aResponse) {
+				moviesService.updateThumb(aRequest.params.id, function (aError, aResults) {});
+			});
+		}
+
 		if (!aResults) {
 			mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults){
 				movieData = aResults;
