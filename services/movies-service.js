@@ -87,15 +87,18 @@ exports.deleteTitle = function (aMovie, aNext) {
     });
 };
 
-exports.updateMovie = function(movie, aNext) {
-    Movie.update({_id: movie.id}, {
-        collection_location: movie.collection_location,
-        collection_quality: movie.collection_quality,
-        collection_media: movie.collection_media
-    }, function(aError, numberAffected, rawResponse, content) {
+exports.updateMovie = function(aMovie, aData, aNext) {
+    console.log(aData);
+    Movie.update({_id: aMovie}, {
+        collection_location : aData.collection_location,
+        collection_quality  : aData.collection_quality,
+        collection_media    : aData.collection_media,
+        collection_rating   : aData.collection_rating,
+        collection_watched  : aData.collection_watched
+    }, function(aError, numberAffected, rawResponse, aData) {
        if (aError) {
            return aNext(aError);
        }
-       aNext(null, content);
+       aNext(null, aData);
     });
 };

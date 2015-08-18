@@ -48,7 +48,7 @@
 	<div class="mdl-check mdl-checkbox">
 		<label for="collection-watched">Watched:</label>
 		<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="collection_watched">
-		  <input type="checkbox" id="collection_watched" name="collection-watched" class="mdl-checkbox__input" />
+		  <input type="checkbox" id="collection_watched" name="collection_watched" class="mdl-checkbox__input" />
 		</label>
 	</div>
 
@@ -61,6 +61,12 @@
 	</div>
 	<div class="mdl-textfield mdl-js-textfield">
 		<label for="collection-location">Media Type:</label> {{ movie.collection_media }}
+	</div>
+	<div class="mdl-textfield mdl-js-textfield">
+		<label for="collection-location">Rating:</label> {{ movie.collection_rating }}
+	</div>
+	<div class="mdl-textfield mdl-js-textfield">
+		<label for="collection-location">Watched:</label> {% if movie.collection_watched %} Yes {% else %} No {% endif %}
 	</div>
 	{% endif %}
 </div>

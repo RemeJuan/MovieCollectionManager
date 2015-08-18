@@ -20,7 +20,7 @@ var movieSchema = new Schema({
     collection_quality  : {type: String},
     collection_media    : {type: String},
     collection_watched  : {
-        type Boolean,
+        type: Boolean,
         default: false
     },
     collection_rating   : {
