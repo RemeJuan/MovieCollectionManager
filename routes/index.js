@@ -90,7 +90,7 @@ router.route('/movie-details/:id/edit')
 	});
 })
 .post(function (aRequest, aResponse) {
-	moviesService.updateMovie(aRequest.body, function (aError, aResults) {
+	moviesService.updateMovie(aRequest.params.id, aRequest.body, function (aError, aResults) {
 		if (aError) {
 			return aResponse.render('index', {
 				detailsView: true,

@@ -42,52 +42,7 @@
 		  	</p>
 		</div>
 
-		<div class="mdl-card__supporting-text collection-details">
-			<h2 class="mdl-card__title-text">Collection Details</h2>
-			{% if !inCollection or editable %}
-			<div class="mdl-textfield mdl-js-textfield">
-				<label for="collection-location">Location:</label>
-				<select id="collection-location" name="collection_location" class="mdl-textfield__input" required>
-					<option {% if !movie.collection_location %} selected {% endif %}></option>
-					<option value="Media Server" {% if movie.collection_location == 'Media Server' %} selected {% endif %}>Media Server</option>
-					<option value="Folder 1" {% if movie.collection_location == 'Folder 1' %} selected {% endif %}>Folder 1</option>
-					<option value="Folder 2" {% if movie.collection_location == 'Folder 2' %} selected {% endif %}>Folder 2</option>
-				</select>
-			</div>
-
-			<div class="mdl-textfield mdl-js-textfield">
-				<label for="collection-quality">Quality:</label>
-				<select id="collection-quality" name="collection_quality" class="mdl-textfield__input" required>
-					<option {% if !movie.collection_quality %} selected {% endif %}></option>
-					<option value="1080p" {% if movie.collection_quality == '1080p' %} selected {% endif %}>1080p</option>
-					<option value="720p" {% if movie.collection_quality == '720p' %} selected {% endif %}>720p</option>
-					<option value="480p" {% if movie.collection_quality == '480p' %} selected {% endif %}>480p</option>
-					<option value="SD" {% if movie.collection_quality == 'SD' %} selected {% endif %}>SD</option>
-				</select>
-			</div>
-
-			<div class="mdl-textfield mdl-js-textfield">
-				<label for="collection-media">Media Type:</label>
-				<select id="collection-media" name="collection_media" class="mdl-textfield__input" required>
-					<option {% if !movie.collection_media %} selected {% endif %}></option>
-					<option value="Blu-ray" {% if movie.collection_media == 'Blu-ray' %} selected {% endif %}>Blu-ray</option>
-					<option value="DVD" {% if movie.collection_media == 'DVD' %} selected {% endif %}>DVD</option>
-					<option value="Web-Rip" {% if movie.collection_media == 'Web-Rip' %} selected {% endif %}>Web-Rip</option>
-				</select>
-			</div>
-
-			{% else %}
-			<div class="mdl-textfield mdl-js-textfield">
-				<label for="collection-location">Location:</label> {{ movie.collection_location }}
-			</div>
-			<div class="mdl-textfield mdl-js-textfield">
-				<label for="collection-location">Quality:</label> {{ movie.collection_quality }}
-			</div>
-			<div class="mdl-textfield mdl-js-textfield">
-				<label for="collection-location">Media Type:</label> {{ movie.collection_media }}
-			</div>
-			{% endif %}
-		</div>
+		{% include 'collection-details.html' %}
 
 		<div class="cta">
 		{% if !inCollection %}
