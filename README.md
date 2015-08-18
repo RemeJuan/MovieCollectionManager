@@ -1,13 +1,12 @@
 # Movie Collection Manager
 
-[![Join the chat at https://gitter.im/RemeJuan/MovieCollectionManager](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/RemeJuan/MovieCollectionManager?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-A small web app runnign on Node/Express/Mongo sourcing data from TMDB.
+A small web app running on Node/Express/Mongo sourcing data from TMDB.
 
 You can use this locally or online, I am using Heroku, to manage your own personal movie collection.
 
-More basic features are in place now, searching TMDB, adding an dmodifying data in your local collection.
+More basic features are in place now, searching TMDB, adding and modifying data in your local collection.
 
+[![Join the chat at https://gitter.im/RemeJuan/MovieCollectionManager](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/RemeJuan/MovieCollectionManager?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ![Stable](https://img.shields.io/badge/Status-Stable-blue.svg)
 ![License - MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
 
