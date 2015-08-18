@@ -98,6 +98,12 @@
 				Add to collection
 			</div>
 		{% elseif editable %}
+			<a id="delete-from-collection" href="/delete/{{ movie.id }}" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+			  <i class="material-icons">delete</i>
+			</a>
+			<div class="mdl-tooltip" for="delete-from-collection">
+				Delete this title
+			</div>
 			<button id="add-to-collection" type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
 			  <i class="material-icons">save</i>
 			</button>

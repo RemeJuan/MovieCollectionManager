@@ -1,34 +1,34 @@
 var Movie = require('../models/movies-model').Movies;
 
-exports.addMovie = function(movie, form, next) {
+exports.addMovie = function(aMovie, aForm, aNext) {
     var newMovie = new Movie({
-        _id                 : movie.id,
-        title               : movie.title,
-        tagline             : movie.tagline,
-        release_date        : movie.release_date,
-        genres              : movie.genres,
-        runtime             : movie.runtime,
-        vote_average        : movie.vote_average,
-        vote_count          : movie.vote_count,
-        overview            : movie.overview,
-        homepage            : movie.homepage,
-        tmdb_id             : movie.id,
-        imdb_id             : movie.imdb_id,
-        poster_path         : movie.poster_path,
-        collection_location : form.collection_location,
-        collection_quality  : form.collection_quality,
-        collection_media    : form.collection_media
+        _id                 : aMovie.id,
+        title               : aMovie.title,
+        tagline             : aMovie.tagline,
+        release_date        : aMovie.release_date,
+        genres              : aMovie.genres,
+        runtime             : aMovie.runtime,
+        vote_average        : aMovie.vote_average,
+        vote_count          : aMovie.vote_count,
+        overview            : aMovie.overview,
+        homepage            : aMovie.homepage,
+        tmdb_id             : aMovie.id,
+        imdb_id             : aMovie.imdb_id,
+        poster_path         : aMovie.poster_path,
+        collection_location : aForm.collection_location,
+        collection_quality  : aForm.collection_quality,
+        collection_media    : aForm.collection_media
     });
 
-    newMovie.save(function(err) {
+    newMovie.save(function(aError) {
         if (err) {
-            return next(err);
+            return aNext(aError);
         }
-        next(null);
+        aNext(null);
     });
 };
 
-exports.getAllMovies = function(movies, next) {
+exports.getAllMovies = function(aMovies, aNext) {
     Movie.find({
         
     },
@@ -37,12 +37,12 @@ exports.getAllMovies = function(movies, next) {
         sort: {date: -1},
         limit: 5
     },
-     function(err, movies) {
-        next(err, movies);
+     function(aError, aMovies) {
+        aNext(aError, aMovies);
     });
 };
 
-exports.getAllMoviesCollection = function(movies, next) {
+exports.getAllMoviesCollection = function(aMovies, aNext) {
     Movie.find({
         
     },
@@ -51,12 +51,12 @@ exports.getAllMoviesCollection = function(movies, next) {
         sort: {title: 1},
         limit: 20
     },
-     function(err, movies) {
-        next(err, movies);
+     function(aError, aMovies) {
+        aNext(aError, aMovies);
     });
 };
 
-exports.searchCollection = function (movieTitle, next) {
+exports.searchCollection = function (movieTitle, aNext) {
     Movie.find({
         title: {'$regex': movieTitle}
     },
@@ -64,28 +64,36 @@ exports.searchCollection = function (movieTitle, next) {
     {
         sort: {title: 1},
         limit: 20
-    }, function (err, movies) {
-        next(err, movies);
+    }, function (aError, aMovies) {
+        aNext(aError, aMovies);
     });
 }
 
-exports.findMovie = function(movie, next) {
+exports.findMovie = function(aMovie, aNext) {
     Movie.findOne({
-        _id: movie
-    }, function(err, movie) {
-        next(err, movie);
+        _id: aMovie
+    }, function(aError, aMovie) {
+        aNext(aError, aMovie);
     });
 };
 
-exports.updateMovie = function(movie, next) {
+exports.deleteTitle = function (aMovie, aNext) {
+    Movie.findOneAndRemove({
+        e_id: aMovie
+    }, function(aError) {
+        aNext(aError);
+    });
+};
+
+exports.updateMovie = function(movie, aNext) {
     Movie.update({_id: movie.id}, {
         collection_location: movie.collection_location,
         collection_quality: movie.collection_quality,
         collection_media: movie.collection_media
-    }, function(err, numberAffected, rawResponse, content) {
-       if (err) {
-           return next(err);
+    }, function(aError, numberAffected, rawResponse, content) {
+       if (aError) {
+           return aNext(aError);
        }
-       next(null, content);
+       aNext(null, content);
     });
 };
