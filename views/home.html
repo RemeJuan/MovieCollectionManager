@@ -2,35 +2,65 @@
 No results
 {% endif %}
 
-<div class="mdl-grid home-grid">
-	{% for movie in movies %}
-	<div class="mdl-card mdl-shadow--2dp mdl-grid mdl-cell--3-col movie-home-card">
-
-		<div class="img mdl-cell mdl-cell--4-col">
-		{% if movie.poster_path %}
-			<img src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
-		{% endif %}	
-
-		{% if !movie.poster_path %}
-			<img src="/images/placeholder-thumb.png" width="92" height="138" />
-		{% endif %}
-		</div>
-
-		<div class="content mdl-cell mdl-cell--8-col">
-			<div class="mdl-card__title">
-			  <h2 class="mdl-card__title-text">{{ movie.title }}</h2>
-			</div>
-			<div class="mdl-card__supporting-text">
-			{{ movie.tagline }} ({{ movie.release_date | date('Y-m-d') }})		</div>
-		</div>
-
-		<div class="cta">
-			<a 	class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
-				href="/movie-details/{{ movie.id }}">
-			  <i class="material-icons">info</i>
-			</a>
-		</div>
-
+<div class="mdl-card mdl-shadow--2dp mdl-grid movie-home-card">
+	<div class="mdl-card__title">
+	  <h2 class="mdl-card__title-text">Welcome</h2>
 	</div>
-	{% endfor %}
+
+	<div class="mdl-card__supporting-text">
+	  Search below to add movies to your collection
+	</div>
+
+	<form id="movie-search" name="movie-search" method="post" class="mdl-grid">
+		<div class="mdl-cell mdl-cell--1-col mdl-textfield">
+			<i class="material-icons">search</i>
+		</div>
+		<div class="mdl-cell mdl-cell--11-col">
+			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<input class="mdl-textfield__input" type="text" id="search" name="search" />
+				<label class="mdl-textfield__label" for="search">Search TMDB...</label>
+			</div>
+		</div>
+	</form>
 </div>
+
+<div class="mdl-card movie-home-card heading">
+	<div class="mdl-card__title">
+	  <h2 class="mdl-card__title-text">Latest additions to you collection</h2>
+	</div>
+</div>
+
+{% for movie in movies %}
+<div class="mdl-card mdl-shadow--2dp mdl-grid movie-home-card">
+
+	<div class="img mdl-cell mdl-cell--3-col">
+		<a href="/movie-details/{{ movie.id }}">
+			{% if movie.poster_path %}
+				<img src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
+			{% endif %}	
+
+			{% if !movie.poster_path %}
+				<img src="/images/placeholder-thumb.png" width="92" height="138" />
+			{% endif %}
+		</a>
+	</div>
+
+	<div class="content mdl-cell mdl-cell--9-col">
+		<div class="mdl-card__title">
+			<a href="/movie-details/{{ movie.id }}" class="heading-link">
+		  		<h2 class="mdl-card__title-text">{{ movie.title }}</h2>
+		  	</a>
+		</div>
+
+		<div class="mdl-card__supporting-text">
+		  {{ movie.overview }}
+		</div>
+	</div>
+	<div class="cta">
+		<a 	class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
+			href="/movie-details/{{ movie.id }}">
+		  <i class="material-icons">info</i>
+		</a>
+	</div>
+</div>
+{% endfor %}

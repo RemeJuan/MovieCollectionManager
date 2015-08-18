@@ -2,22 +2,34 @@
 No results
 {% endif %}
 
+{% if searchResults %}
+<div class="mdl-card movie-search-card heading">
+	<div class="mdl-card__title">
+	  <h2 class="mdl-card__title-text">Search results</h2>
+	</div>
+</div>
+{% endif %}
+
 {% for movie in movies %}
 <div class="mdl-card mdl-shadow--2dp mdl-grid movie-search-card">
 
 	<div class="img mdl-cell mdl-cell--1-col">
-	{% if movie.poster_path %}
-		<img src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
-	{% endif %}	
+		<a href="/movie-details/{{ movie.id }}">
+			{% if movie.poster_path %}
+				<img src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
+			{% endif %}	
 
-	{% if !movie.poster_path %}
-		<img src="/images/placeholder-thumb.png" width="92" height="138" />
-	{% endif %}
+			{% if !movie.poster_path %}
+				<img src="/images/placeholder-thumb.png" width="92" height="138" />
+			{% endif %}
+		</a>
 	</div>
 
 	<div class="content mdl-cell mdl-cell--11-col">
 		<div class="mdl-card__title">
-		  <h2 class="mdl-card__title-text">{{ movie.title }}</h2>
+			<a href="/movie-details/{{ movie.id }}" class="heading-link">
+		  		<h2 class="mdl-card__title-text">{{ movie.title }}</h2>
+		  	</a>
 		</div>
 
 		<div class="mdl-card__supporting-text">

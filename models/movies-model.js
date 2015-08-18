@@ -18,7 +18,11 @@ var movieSchema = new Schema({
     poster_path         : {type: String},
     collection_location : {type: String},
     collection_quality  : {type: String},
-    collection_media    : {type: String}
+    collection_media    : {type: String},
+    created_date        : {
+        type: Date,
+        default: Date.now
+    }
 });
 
 var Movies = mongoose.model('Movies', movieSchema);

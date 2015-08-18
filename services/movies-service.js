@@ -32,15 +32,42 @@ exports.getAllMovies = function(movies, next) {
     Movie.find({
         
     },
-        null,
+        'poster_path title overview id',
     {
-        sort: {title: 1},
-        limit: 10
+        sort: {date: -1},
+        limit: 5
     },
      function(err, movies) {
         next(err, movies);
     });
 };
+
+exports.getAllMoviesCollection = function(movies, next) {
+    Movie.find({
+        
+    },
+        'poster_path title overview id',
+    {
+        sort: {title: 1},
+        limit: 20
+    },
+     function(err, movies) {
+        next(err, movies);
+    });
+};
+
+exports.searchCollection = function (movieTitle, next) {
+    Movie.find({
+        title: {'$regex': movieTitle}
+    },
+        'poster_path title overview id',
+    {
+        sort: {title: 1},
+        limit: 20
+    }, function (err, movies) {
+        next(err, movies);
+    });
+}
 
 exports.findMovie = function(movie, next) {
     Movie.findOne({

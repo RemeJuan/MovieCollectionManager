@@ -4,12 +4,28 @@ var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
 var http = require('http');
 var moviesService = require('../services/movies-service');
 
-var movieData;
+var movieData, location;
 
 /* GET home page. */
 router.route('/')
 .get(function (aRequest, aResponse) {
 	moviesService.getAllMovies({}, function (aError, aMovies) {
+		return aResponse.render('index', {
+			homeView: true,
+			movies : aMovies
+		});
+	});
+})
+.post(function (aRequest, aResponse) {
+	var searchQuery = aRequest.body.search,
+		searchQuery = encodeURIComponent(searchQuery);
+
+	aResponse.redirect('/search-results/tmdb/' + searchQuery);
+});
+
+router.route('/collection')
+.get(function (aRequest, aResponse) {
+	moviesService.getAllMoviesCollection({}, function (aError, aMovies) {
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,
@@ -21,7 +37,7 @@ router.route('/')
 	var searchQuery = aRequest.body.search,
 		searchQuery = encodeURIComponent(searchQuery);
 
-	aResponse.redirect('/search-results/' + searchQuery);
+	aResponse.redirect('/search-results/collection/' + searchQuery);
 });
 
 router.route('/movie-details/:id')
@@ -88,21 +104,43 @@ router.route('/movie-details/:id/edit')
 	})
 });
 
-router.route('/search-results/:search')
+router.route('/search-results/:location/:search')
 .get(function (aRequest, aResponse) {
-	mdb.searchMovie({query: aRequest.params.search  }, function(aError, aResults){
-	  return aResponse.render('index', {
-	  	searchView: true,
-	  	searchable: true,
-	  	movies : aResults.results
-	  });
-	});
+	location = aRequest.params.location;
+	if (location == 'tmdb') {
+		mdb.searchMovie({query: aRequest.params.search  }, function(aError, aResults){
+		  return aResponse.render('index', {
+		  	searchView: true,
+		  	searchable: true,
+		  	searchResults: true,
+		  	movies : aResults.results
+		  });
+		});
+	} else {
+		moviesService.searchCollection(aRequest.params.search, function (aError, aResults) {
+			if (aError) {
+				console.log(aError);
+				return aResponse.render('index', {
+					detailsView: true,
+					movie: movieData,
+					error: aError
+				});
+			}
+
+			return aResponse.render('index', {
+				searchView: true,
+				searchable: true,
+				searchResults: true,
+				movies : aResults
+			});
+		});
+	}
 })
 .post(function (aRequest, aResponse) {
 	var searchQuery = aRequest.body.search,
 		searchQuery = encodeURIComponent(searchQuery);
 
-	aResponse.redirect('/search-results/' + searchQuery);
+	aResponse.redirect('/search-results/' + location + '/' + searchQuery);
 })
 
 module.exports = router;
