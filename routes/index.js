@@ -51,19 +51,20 @@ router.route('/movie-details/:id')
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
 		movieData = aResults;
 
-		if(!movieData.local_img) {
-			downloader.download('http://image.tmdb.org/t/p/w342' + movieData.poster_path, imgDir);
-			downloader.on('done', function (aResponse) {
-				moviesService.updateImg(aRequest.params.id, function (aError, aResults) {});
-			});
-		}
+		// Does not persist on Heroku instance
+		// if(!movieData.local_img) {
+		// 	downloader.download('http://image.tmdb.org/t/p/w342' + movieData.poster_path, imgDir);
+		// 	downloader.on('done', function (aResponse) {
+		// 		moviesService.updateImg(aRequest.params.id, function (aError, aResults) {});
+		// 	});
+		// }
 
-		if (!movieData.local_thumb) {
-			downloader.download('http://image.tmdb.org/t/p/w92' + movieData.poster_path, thumbDir);
-			downloader.on('done', function (aResponse) {
-				moviesService.updateThumb(aRequest.params.id, function (aError, aResults) {});
-			});
-		}
+		// if (!movieData.local_thumb) {
+		// 	downloader.download('http://image.tmdb.org/t/p/w92' + movieData.poster_path, thumbDir);
+		// 	downloader.on('done', function (aResponse) {
+		// 		moviesService.updateThumb(aRequest.params.id, function (aError, aResults) {});
+		// 	});
+		// }
 
 		if (!aResults) {
 			mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults){
