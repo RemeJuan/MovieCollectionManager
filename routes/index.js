@@ -53,14 +53,16 @@ router.route('/movie-details/:id')
 
 		// Does not persist on Heroku instance
 		if (aResults) {
-			if(aResults.local_img) {
+			console.log(aResults);
+			if(!aResults.local_img) {
+				console.log(aResults.local_img);
 				downloader.download('http://image.tmdb.org/t/p/w342' + movieData.poster_path, imgDir);
 				downloader.on('done', function (aResponse) {
 					moviesService.updateImg(aRequest.params.id, function (aError, aResults) {});
 				});
 			}
 
-			if (aResults.local_thumb) {
+			if (!aResults.local_thumb) {
 				downloader.download('http://image.tmdb.org/t/p/w92' + movieData.poster_path, thumbDir);
 				downloader.on('done', function (aResponse) {
 					moviesService.updateThumb(aRequest.params.id, function (aError, aResults) {});
