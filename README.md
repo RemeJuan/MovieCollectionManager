@@ -10,7 +10,11 @@ More basic features are in place now, searching TMDB, adding and modifying data 
 ![Stable](https://img.shields.io/badge/Status-Stable-blue.svg)
 ![License - MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-[Demo](http://movies-collection.herokuapp.com/) | [Demo](http://mcm.remelehane.me/)
+[Demo](http://mcm.remelehane.me/)
+
+![Media Collection Manager - Home](https://dl.dropboxusercontent.com/u/6374897/mcm/mcm_home.jpg)
+![Media Collection Manager - List View](https://dl.dropboxusercontent.com/u/6374897/mcm/mcm_list.jpg)
+![Media Collection Manager - Detail View](https://dl.dropboxusercontent.com/u/6374897/mcm/mcm_detail.jpg)
 
 ## Dependancies
 * Node.JS v12.X
