@@ -46,6 +46,18 @@ router.route('/collection')
 	aResponse.redirect('/search-results/collection/' + searchQuery);
 });
 
+router.route('/collection/tags/:tag')
+.get(function (aRequest, aResponse) {
+	moviesService.getAllByTag(aRequest.params.tag, function (aError, aResults) {
+		return aResponse.render('index', {
+			searchView: true,
+			searchable: true,
+			lang: locale,
+			movies : aResults
+		});
+	})
+})
+
 router.route('/movie-details/:id')
 .get(function (aRequest, aResponse) {
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {

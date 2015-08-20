@@ -34,7 +34,16 @@ No results
 
 		<div class="mdl-card__supporting-text">
 		  {{ movie.overview }}
+
+		  <div class="list-genres">
+		  	{% for genre in movie.genres %}
+		  		<a href="/collection/tags/{{ genre.name }}">
+		  			<small class="genre-item">{{ genre.name }}</small>
+		  		</a>
+		  	{% endfor %}
+		  </div>
 		</div>
+
 	</div>
 	<div class="cta">
 		<a 	class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"

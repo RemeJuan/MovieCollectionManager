@@ -30,11 +30,13 @@ exports.addMovie = function(aMovie, aForm, aNext) {
     });
 };
 
+var listViewTables = 'poster_path title overview id local_thumb, genres';
+
 exports.getAllMovies = function(aMovies, aNext) {
     Movie.find({
         
     },
-        'poster_path title overview id local_thumb',
+        listViewTables,
     {
         sort: {date: -1},
         limit: 5
@@ -48,7 +50,7 @@ exports.getAllMoviesCollection = function(aMovies, aNext) {
     Movie.find({
         
     },
-        'poster_path title overview id local_thumb',
+        listViewTables,
     {
         sort: {title: 1},
         limit: 20
@@ -62,11 +64,26 @@ exports.searchCollection = function (movieTitle, aNext) {
     Movie.find({
         title: {'$regex': movieTitle}
     },
-        'poster_path title overview id local_thumb',
+        listViewTables,
     {
         sort: {title: 1},
         limit: 20
     }, function (aError, aMovies) {
+        aNext(aError, aMovies);
+    });
+}
+
+exports.getAllByTag = function (aTag, aNext) {
+    Movie.find({
+        'genres.name' : aTag
+    },
+        listViewTables,
+    {
+        sort: {title: 1},
+        limit: 20
+    },
+     function(aError, aMovies) {
+        console.log(aMovies)
         aNext(aError, aMovies);
     });
 }
