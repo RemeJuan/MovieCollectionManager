@@ -42,6 +42,7 @@ Ensure Mongo is running
 
 v0.5.0:
 * Added genreas as 'tags' on list view for a tag based search.
+* Added Location, Watched and Quality tags for additional filter options
 
 v0.4.0:
 * Images for movies are now automatically download

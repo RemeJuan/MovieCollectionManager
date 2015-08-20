@@ -36,7 +36,7 @@ exports.getAllMovies = function(aMovies, aNext) {
     Movie.find({
         
     },
-        listViewTables,
+        null,
     {
         sort: {date: -1},
         limit: 5
@@ -50,7 +50,7 @@ exports.getAllMoviesCollection = function(aMovies, aNext) {
     Movie.find({
         
     },
-        listViewTables,
+        null,
     {
         sort: {title: 1},
         limit: 20
@@ -64,7 +64,7 @@ exports.searchCollection = function (movieTitle, aNext) {
     Movie.find({
         title: {'$regex': movieTitle}
     },
-        listViewTables,
+        null,
     {
         sort: {title: 1},
         limit: 20
@@ -77,7 +77,52 @@ exports.getAllByTag = function (aTag, aNext) {
     Movie.find({
         'genres.name' : aTag
     },
-        listViewTables,
+        null,
+    {
+        sort: {title: 1},
+        limit: 20
+    },
+     function(aError, aMovies) {
+        console.log(aMovies)
+        aNext(aError, aMovies);
+    });
+}
+
+exports.getAllByLocation = function (aTag, aNext) {
+    Movie.find({
+        collection_location : aTag
+    },
+        null,
+    {
+        sort: {title: 1},
+        limit: 20
+    },
+     function(aError, aMovies) {
+        console.log(aMovies)
+        aNext(aError, aMovies);
+    });
+}
+
+exports.getAllByWatched = function (aTag, aNext) {
+    Movie.find({
+        collection_watched : aTag
+    },
+        null,
+    {
+        sort: {title: 1},
+        limit: 20
+    },
+     function(aError, aMovies) {
+        console.log(aMovies)
+        aNext(aError, aMovies);
+    });
+}
+
+exports.getAllByQuality = function (aTag, aNext) {
+    Movie.find({
+        collection_quality : aTag
+    },
+        null,
     {
         sort: {title: 1},
         limit: 20

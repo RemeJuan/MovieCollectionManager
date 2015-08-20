@@ -46,16 +46,41 @@ router.route('/collection')
 	aResponse.redirect('/search-results/collection/' + searchQuery);
 });
 
-router.route('/collection/tags/:tag')
+router.route('/collection/tags/:query/:tag')
 .get(function (aRequest, aResponse) {
-	moviesService.getAllByTag(aRequest.params.tag, function (aError, aResults) {
+	var query = aRequest.params.query;
+	function returnResponse(aResults) {
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,
 			lang: locale,
 			movies : aResults
 		});
-	})
+	}
+	if (query == 'genre') {
+		moviesService.getAllByTag(aRequest.params.tag, function (aError, aResults) {
+			returnResponse(aResults);
+		});
+	}
+
+	if (query == 'watched') {
+		moviesService.getAllByWatched(aRequest.params.tag, function (aError, aResults) {
+			returnResponse(aResults);
+		});
+	}
+
+	if (query == 'location') {
+		moviesService.getAllByLocation(aRequest.params.tag, function (aError, aResults) {
+			returnResponse(aResults);
+		});
+	}
+
+	if (query == 'quality') {
+		moviesService.getAllByQuality(aRequest.params.tag, function (aError, aResults) {
+			returnResponse(aResults);
+		});
+	}
+
 })
 
 router.route('/movie-details/:id')

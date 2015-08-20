@@ -35,21 +35,49 @@ No results
 		<div class="mdl-card__supporting-text">
 		  {{ movie.overview }}
 
-		  <div class="list-genres">
-		  	{% for genre in movie.genres %}
-		  		<a href="/collection/tags/{{ genre.name }}">
-		  			<small class="genre-item">{{ genre.name }}</small>
-		  		</a>
-		  	{% endfor %}
-		  </div>
+			<div>
+				<span class="list">
+				<a href="/collection/tags/watched/{{ movie.collection_watched }}">
+				  	{% if movie.collection_watched %}
+				  		<small class="tag tag-red">Watched</small>
+				  	{% else %}
+					  	<small class="tag">Unwatched</small>
+					{% endif %}
+				</a>
+			  	</span>
+			  	<span class="list">
+			  		<a href="/collection/tags/location/{{ movie.collection_location }}">
+			  	  	{% if movie.collection_location %}
+			  	  		<small class="tag tag-green">{{ movie.collection_location }}</small>
+			  	  	{% else %}
+			  		  	<small class="tag">Unknown Location</small>
+			  		{% endif %}
+			  		</a>
+			  	</span>			  	
+			  	<span class="list">
+			  		<a href="/collection/tags/quality/{{ movie.collection_quality }}">
+			  	  	{% if movie.collection_quality %}
+			  	  		<small class="tag tag-yellow">{{ movie.collection_quality }}</small>
+			  	  	{% else %}
+			  		  	<small class="tag">Unknown Quality</small>
+			  		{% endif %}
+			  		</a>
+			  	</span>
+			</div>
+
+		  	<div class="list list-genres">
+			  	{% for genre in movie.genres %}
+			  		<a href="/collection/tags/genre/{{ genre.name }}">
+			  			<small class="tag tag-blue">{{ genre.name }}</small>
+			  		</a>
+			  	{% endfor %}
+		  	</div>
 		</div>
 
 	</div>
+
 	<div class="cta">
-		<a 	class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
-			href="/movie-details/{{ movie.id }}">
-		  <i class="material-icons">info</i>
-		</a>
+	{% include 'buttons/info-button.html' %}
 	</div>
 </div>
 {% endfor %}
