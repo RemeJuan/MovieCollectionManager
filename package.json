@@ -1,7 +1,7 @@
 {
   "name": "MovieCollectionManager",
-  "version": "0.4.0",
-  "private": true,
+  "version": "0.5.0",
+  "private": false,
   "description": "Node Movie collection manager using TMDB for info and mongo for collection storage",
   "author": "Reme Le Hane info@remelehane.me",
   "scripts": {
