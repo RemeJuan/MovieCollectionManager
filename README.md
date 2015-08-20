@@ -40,6 +40,9 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.5.0:
+* Added genreas as 'tags' on list view for a tag based search.
+
 v0.4.0:
 * Images for movies are now automatically download
 * If a collection title's image has been downloaded the local one will be loaded instead of TMDB's
