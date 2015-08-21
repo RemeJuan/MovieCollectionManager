@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var movieService = require('../services/movies-service');
+var mongoosePaginate = require('mongoose-paginate');
 
 var movieSchema = new Schema({
     _id                 : {type: String, required: true, unique: true},
@@ -38,9 +39,13 @@ var movieSchema = new Schema({
     local_thumb         : {
         type: Boolean,
         default: false
+    },
+    collection_wanted: {
+        type: Boolean,
+        default: false
     }
 });
-
+movieSchema.plugin(mongoosePaginate);
 var Movies = mongoose.model('Movies', movieSchema);
 
 module.exports = {

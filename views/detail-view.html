@@ -47,9 +47,14 @@
 		<div class="cta">
 		<div id="menu" class="flyout-menu">
 		{% if !inCollection %}
+			{% include 'buttons/wanted-button.html' %}
 			{% include 'buttons/add-button.html' %}
 		{% elseif editable %}
 			{% include 'buttons/save-button.html' %}
+			{% include 'buttons/delete-button.html' %}
+			{% include 'buttons/cancel-button.html' %}
+		{% elseif movie.collection_wanted %}
+			{% include 'buttons/move-button.html' %}
 			{% include 'buttons/delete-button.html' %}
 			{% include 'buttons/cancel-button.html' %}
 		{% else %}

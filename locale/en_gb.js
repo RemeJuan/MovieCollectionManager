@@ -32,9 +32,13 @@ var locale = {
 			imdbSite: 'IMDB'
 		}
 	},
+	listView: {
+
+	},
 	navigation: {
 		home: 'Home',
-		collection: 'My Collection'
+		collection: 'My Collection',
+		wanted: 'Wanted'
 	},
 	locations: [
 		'Media Server',
@@ -63,7 +67,13 @@ var locale = {
 		8,
 		9,
 		10
-	]
+	],
+	tags: {
+		watched: 'Watched',
+		unwatched: 'Unwatched',
+		unLocation: 'Unknown Location',
+		unQuality: 'Unknown Location'
+	}
 };
 
 

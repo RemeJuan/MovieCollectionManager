@@ -35,13 +35,14 @@ No results
 		<div class="mdl-card__supporting-text">
 		  {{ movie.overview }}
 
+		  	{% if !movie.collection_wanted and !movie.genre_ids %}
 			<div>
 				<span class="list">
 				<a href="/collection/tags/watched/{{ movie.collection_watched }}">
 				  	{% if movie.collection_watched %}
-				  		<small class="tag tag-red">Watched</small>
+				  		<small class="tag tag-red">{{ lang.tags.watched }}</small>
 				  	{% else %}
-					  	<small class="tag">Unwatched</small>
+					  	<small class="tag">{{ lang.tags.unwatched }}</small>
 					{% endif %}
 				</a>
 			  	</span>
@@ -50,7 +51,7 @@ No results
 			  	  	{% if movie.collection_location %}
 			  	  		<small class="tag tag-green">{{ movie.collection_location }}</small>
 			  	  	{% else %}
-			  		  	<small class="tag">Unknown Location</small>
+			  		  	<small class="tag">{{ lang.tags.unLocation }}</small>
 			  		{% endif %}
 			  		</a>
 			  	</span>			  	
@@ -59,12 +60,12 @@ No results
 			  	  	{% if movie.collection_quality %}
 			  	  		<small class="tag tag-yellow">{{ movie.collection_quality }}</small>
 			  	  	{% else %}
-			  		  	<small class="tag">Unknown Quality</small>
+			  		  	<small class="tag">{{ lang.tags.unQuality }}</small>
 			  		{% endif %}
 			  		</a>
 			  	</span>
 			</div>
-
+			{% endif %}
 		  	<div class="list list-genres">
 			  	{% for genre in movie.genres %}
 			  		<a href="/collection/tags/genre/{{ genre.name }}">
@@ -82,3 +83,14 @@ No results
 </div>
 {% endfor %}
 
+{% if pagination.length > 0 %}
+<div class="pagination  mdl-cell mdl-cell--12-col">Page: 
+{% for page in pagination %}
+	{% if page == currentPage %}
+		{{ page }} {% if !loop.last %} | {% endif %}
+	{% else %}
+		<a href="/collection/{{ page }}">{{ page }}</a>{% if !loop.last %} | {% endif %}
+	{% endif %}
+{% endfor %}
+</div>
+{% endif %}
