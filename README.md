@@ -40,6 +40,9 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.5.1: 
+* Deleting a title now also deletes its associated images
+
 v0.5.0:
 * Added genreas as 'tags' on list view for a tag based search.
 * Added Location, Watched and Quality tags for additional filter options

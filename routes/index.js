@@ -5,6 +5,7 @@ var http = require('http');
 var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
 var downloader = require('downloader');
+var fs = require('fs-extra');
 
 var movieData, location,
 	imgDir = 'public/images/w342/',
@@ -171,7 +172,7 @@ router.route('/movie-details/:id/edit')
 
 router.route('/delete/:id')
 .get(function (aRequest, aResponse) {
-	moviesService.deleteTitle(aRequest.params.id, function (aError) {
+	moviesService.deleteTitle(aRequest.params.id, function (aError, aResults) {
 		if (aError) {
 			return aResponse.render('index', {
 				detailsView: true,
@@ -180,6 +181,22 @@ router.route('/delete/:id')
 				lang: locale,
 				movie: aResults,
 				error: aError
+			});
+		}
+
+		if ( aResults.local_img ) {
+			fs.remove(imgDir + aResults.poster_path, function (err) {
+			  if (err) return console.error(err)
+
+			  console.log('success!');
+			});
+		}
+
+		if ( aResults.local_thumb ) {
+			fs.remove(thumbDir + aResults.poster_path, function (err) {
+			  if (err) return console.error(err)
+
+			  console.log('success!');
 			});
 		}
 
