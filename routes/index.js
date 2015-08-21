@@ -77,7 +77,7 @@ router.route('/wanted/:page')
 	aResponse.redirect('/search-results/wanted/' + searchQuery);
 });
 
-router.route('/wanted/:id')
+router.route('/wanted/add/:id')
 .get(function (aRequest, aResponse) {
 	mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults){
 		movieData = aResults;
