@@ -144,8 +144,8 @@ exports.findMovie = function(aMovie, aNext) {
 exports.deleteTitle = function (aMovie, aNext) {
     Movie.findOneAndRemove({
         _id: aMovie
-    }, function(aError) {
-        aNext(aError);
+    }, function(aError, aMovie) {
+        aNext(aError, aMovie);
     });
 };
 
