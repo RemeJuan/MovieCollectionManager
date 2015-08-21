@@ -40,6 +40,10 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.6.0:
+* Added in wanted list for tracking movies you wish to add to your collection.
+* Added in pagiantion in both Wanted and My Collection List views.
+
 v0.5.1: 
 * Deleting a title now also deletes its associated images
 
