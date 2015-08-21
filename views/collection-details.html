@@ -1,6 +1,6 @@
 <div class="mdl-card__supporting-text collection-details">
 	<h2 class="mdl-card__title-text">{{ lang.detailsView.collectionDetails }}</h2>
-	{% if !inCollection or editable %}
+	{% if !inCollection or editable or movie.collection_wanted %}
 	<div class="mdl-textfield mdl-js-textfield">
 		<label for="collection-location">{{ lang.detailsView.labels.location }}:</label>
 		<select id="collection-location" name="collection_location" class="mdl-textfield__input">

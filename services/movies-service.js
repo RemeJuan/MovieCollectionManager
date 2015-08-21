@@ -19,7 +19,8 @@ exports.addMovie = function(aMovie, aForm, aNext) {
         collection_quality  : aForm.collection_quality,
         collection_media    : aForm.collection_media,
         collection_watched  : aForm.collection_watched,
-        collection_rating   : aForm.collection_rating
+        collection_rating   : aForm.collection_rating,
+        collection_wanted   : aMovie.wanted
     });
 
     newMovie.save(function(aError) {
@@ -32,11 +33,11 @@ exports.addMovie = function(aMovie, aForm, aNext) {
 
 exports.getAllMovies = function(aMovies, aNext) {
     Movie.find({
-        
+        collection_wanted: {'$ne': true}
     },
         'poster_path title overview id local_thumb',
     {
-        sort: {date: -1},
+        sort: {created_date: -1},
         limit: 5
     },
      function(aError, aMovies) {
@@ -44,7 +45,49 @@ exports.getAllMovies = function(aMovies, aNext) {
     });
 };
 
-exports.getAllMoviesCollection = function(aMovies, aNext) {
+exports.getAllMoviesCollection = function(aMovies, aPage, aLimit, aNext) {
+    Movie.count({
+        collection_wanted: {'$ne': true}
+    }, function (aError, aCount){
+
+        Movie.paginate({
+            collection_wanted: {'$ne': true}
+        },
+        {
+            page: aPage,
+            limit: aLimit,
+            sortBy: {title: 1}
+        },
+        function(aError, aMovies) {
+            aNext(aError, aMovies, aCount);
+        });
+
+    });
+
+
+};
+
+exports.getAllWanted = function(aMovies, aPage, aLimit, aNext) {
+    Movie.count({
+        collection_wanted: true
+    },
+    function (aError, aCount) {
+
+        Movie.paginate({
+            collection_wanted: true
+        },
+        {
+            page: aPage,
+            limit: aLimit,
+            sortBy: {title: 1}
+        },
+        function(aError, aMovies) {
+            aNext(aError, aMovies, aCount);
+        });
+    });
+};
+
+exports.searchWanted = function(aMovies, aNext) {
     Movie.find({
         
     },
@@ -60,13 +103,14 @@ exports.getAllMoviesCollection = function(aMovies, aNext) {
 
 exports.searchCollection = function (movieTitle, aNext) {
     Movie.find({
-        title: {'$regex': movieTitle}
+        title: {'$regex': new RegExp(movieTitle, 'i')}
     },
         'poster_path title overview id local_thumb',
     {
         sort: {title: 1},
         limit: 20
     }, function (aError, aMovies) {
+        console.log('results', aMovies);
         aNext(aError, aMovies);
     });
 }
@@ -101,6 +145,17 @@ exports.updateMovie = function(aMovie, aData, aNext) {
        aNext(null, aData);
     });
 };
+
+exports.moveToCollection = function(aMovie, aNext) {
+    Movie.update({_id: aMovie}, {
+        collection_wanted   : false
+    }, function(aError, numberAffected, rawResponse, aData) {
+       if (aError) {
+           return aNext(aError);
+       }
+       aNext(null, aData);
+    });
+}
 
 exports.updateImg = function(aMovie, aNext) {
     Movie.update({_id: aMovie}, {

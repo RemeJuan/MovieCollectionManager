@@ -6,7 +6,7 @@ var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
 var downloader = require('downloader');
 
-var movieData, location,
+var movieData, location, limit = 10, pagination = [],
 	imgDir = 'public/images/w342/',
 	thumbDir = 'public/images/w92/';
 
@@ -28,14 +28,130 @@ router.route('/')
 	aResponse.redirect('/search-results/tmdb/' + searchQuery);
 });
 
-router.route('/collection')
+router.route('/wanted')
 .get(function (aRequest, aResponse) {
-	moviesService.getAllMoviesCollection({}, function (aError, aMovies) {
+	moviesService.getAllWanted({}, 1, limit, function (aError, aMovies, aCount){
+		var total = Math.round(aCount / limit),
+			pagination = [];
+		for (i = 1; i <= total; i++) {
+			pagination.push(i);
+		}
+
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,
 			lang: locale,
-			movies : aMovies
+			movies : aMovies,
+			count: aCount,
+			pagination: pagination,
+			currentPage: 1
+		});
+	});
+})
+.post(function (aRequest, aResponse) {
+	var searchQuery = aRequest.body.search,
+		searchQuery = encodeURIComponent(searchQuery);
+
+	aResponse.redirect('/search-results/wanted/' + searchQuery);
+});
+
+router.route('/wanted/:page')
+.get(function (aRequest, aResponse) {
+	moviesService.getAllWanted({}, aRequest.params.page, limit, function (aError, aMovies, aCount) {
+		return aResponse.render('index', {
+			searchView: true,
+			searchable: true,
+			lang: locale,
+			movies : aMovies,
+			count: aCount,
+			pagination: pagination,
+			currentPage: aRequest.params.page
+		});
+	});
+})
+.post(function (aRequest, aResponse) {
+	var searchQuery = aRequest.body.search,
+		searchQuery = encodeURIComponent(searchQuery);
+
+	aResponse.redirect('/search-results/wanted/' + searchQuery);
+});
+
+router.route('/wanted/:id')
+.get(function (aRequest, aResponse) {
+	mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults){
+		movieData = aResults;
+		movieData.wanted = true;
+		
+		moviesService.addMovie(movieData, {}, function (aError, aMovie) {
+			if (aError) {
+				return aResponse.render('index', {
+					detailsView: true,
+					movie: movieData,
+					lang: locale,
+					error: aError
+				});
+			}
+
+			return aResponse.redirect('/movie-details/' + aRequest.params.id);
+		});
+	});
+});
+
+router.route('/wanted/move/:id')
+.get(function (aRequest, aResponse) {
+	moviesService.moveToCollection(aRequest.params.id, function (aError, aResults) {
+		if (aError) {
+			return aResponse.render('index', {
+				detailsView: true,
+				inCollection: true,
+				editable: true,
+				lang: locale,
+				movie: aResults
+			});
+		}
+
+		return aResponse.redirect('/movie-details/' + aRequest.params.id + '/edit');
+	})
+});
+
+router.route('/collection')
+.get(function (aRequest, aResponse) {
+	moviesService.getAllMoviesCollection({}, 1, limit, function (aError, aMovies, aCount) {
+		var total = Math.round(aCount / limit),
+			pagination = [];
+		for (i = 1; i <= total; i++) {
+			pagination.push(i);
+		}
+
+		return aResponse.render('index', {
+			searchView: true,
+			searchable: true,
+			lang: locale,
+			movies : aMovies,
+			count: aCount,
+			pagination: pagination,
+			currentPage: 1
+		});
+	});
+})
+.post(function (aRequest, aResponse) {
+	var searchQuery = aRequest.body.search,
+		searchQuery = encodeURIComponent(searchQuery);
+
+	aResponse.redirect('/search-results/collection/' + searchQuery);
+});
+
+router.route('/collection/:page')
+.get(function (aRequest, aResponse) {
+	moviesService.getAllMoviesCollection({}, aRequest.params.page, limit, function (aError, aMovies, aCount) {
+		return aResponse.render('index', {
+			searchView: true,
+			searchable: true,
+			lang: locale,
+			movies : aMovies,
+			count: aCount,
+			pagination: pagination,
+			currentPage: aRequest.params.page
 		});
 	});
 })
@@ -51,20 +167,28 @@ router.route('/movie-details/:id')
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
 		movieData = aResults;
 
-		// Does not persist on Heroku instance
 		if (aResults) {
 			if(!aResults.local_img) {
-				downloader.download('http://image.tmdb.org/t/p/w342' + movieData.poster_path, imgDir);
-				downloader.on('done', function (aResponse) {
-					moviesService.updateImg(aRequest.params.id, function (aError, aResults) {});
-				});
+				fs.mkdirs(imgDir, function (err) {
+				  if (err) return console.error(err);
+
+				  	downloader.download('http://image.tmdb.org/t/p/w342' + movieData.poster_path, imgDir);
+				  	downloader.on('done', function (aResponse) {
+				  		moviesService.updateImg(aRequest.params.id, function (aError, aResults) {});
+				  	});				
+				})
 			}
 
 			if (!aResults.local_thumb) {
-				downloader.download('http://image.tmdb.org/t/p/w92' + movieData.poster_path, thumbDir);
-				downloader.on('done', function (aResponse) {
-					moviesService.updateThumb(aRequest.params.id, function (aError, aResults) {});
-				});
+				fs.mkdirs(thumbDir, function (err) {
+				  if (err) return console.error(err);
+
+				  	downloader.download('http://image.tmdb.org/t/p/w92' + movieData.poster_path, thumbDir);
+				  	downloader.on('done', function (aResponse) {
+				  		moviesService.updateThumb(aRequest.params.id, function (aError, aResults) {});
+				  	});
+				})
+
 			}
 		}
 
@@ -89,6 +213,7 @@ router.route('/movie-details/:id')
 	});
 })
 .post(function (aRequest, aResponse) {
+	movieData.collection_wanted = false;
 	moviesService.addMovie(movieData, aRequest.body, function (aError, aMovie) {
 		if (aError) {
 			return aResponse.render('index', {
@@ -146,6 +271,18 @@ router.route('/delete/:id')
 			});
 		}
 
+		if ( aResults.local_img ) {
+			fs.remove(imgDir + aResults.poster_path, function (err) {
+			  if (err) return console.error(err)
+			});
+		}
+
+		if ( aResults.local_thumb ) {
+			fs.remove(thumbDir + aResults.poster_path, function (err) {
+			  if (err) return console.error(err)
+			});
+		}
+
 		return aResponse.redirect('/collection');
 	});
 });
@@ -153,6 +290,7 @@ router.route('/delete/:id')
 router.route('/search-results/:location/:search')
 .get(function (aRequest, aResponse) {
 	location = aRequest.params.location;
+
 	if (location == 'tmdb') {
 		mdb.searchMovie({query: aRequest.params.search  }, function(aError, aResults){
 		  return aResponse.render('index', {
