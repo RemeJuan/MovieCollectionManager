@@ -8,8 +8,13 @@ var cons = require('consolidate');
 var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
 var mongoose = require('mongoose');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var index = require('./routes/index');
+var collection = require('./routes/collection');
+var search = require('./routes/search-results');
+var wanted = require('./routes/wanted');
+var details = require('./routes/movie-details');
+var admin = require('./routes/admin');
+// var users = require('./routes/users');
 
 mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/movies-collection'
 
@@ -30,8 +35,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use('/', index);
+app.use('/collection', collection);
+app.use('/search-results', search);
+app.use('/wanted', wanted);
+app.use('/movie-details', details);
+app.use('/admin', admin);
+// app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

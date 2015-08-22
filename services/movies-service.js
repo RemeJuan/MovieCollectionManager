@@ -63,7 +63,7 @@ exports.getAllMoviesCollection = function(aMovies, aPage, aLimit, aNext) {
             page: aPage,
             limit: aLimit,
             sortBy: {title: 1},
-            populate: 'collection_location'
+            populate: 'collection_location collection_media collection_quality'
         },
         function(aError, aMovies) {
             aNext(aError, aMovies, aCount);
@@ -105,17 +105,22 @@ exports.searchWanted = function(aMovies, aNext) {
     });
 };
 
-exports.searchCollection = function (movieTitle, aNext) {
-    Movie.find({
+exports.searchCollection = function (movieTitle, aPage, aLimit, aNext) {
+    Movie.count({
         title: {'$regex': new RegExp(movieTitle, 'i')}
     },
-        null,
-    {
-        sort: {title: 1},
-        limit: 20
-    }, function (aError, aMovies) {
-        console.log('results', aMovies);
-        aNext(aError, aMovies);
+    function (aError, aCount) {
+        Movie.paginate({
+            title: {'$regex': new RegExp(movieTitle, 'i')}
+        },
+        {
+            page: aPage,
+            limit: aLimit,
+            sortBy: {title: 1},
+            populate: 'collection_location collection_media collection_quality'
+        }, function (aError, aMovies, aPageCount, aItemCount) {
+            aNext(aError, aMovies, aPageCount, aItemCount);
+        });
     });
 }
 
