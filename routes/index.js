@@ -203,10 +203,11 @@ router.route('/collection/tags/:query/:tag')
 router.route('/movie-details/:id')
 .get(function (aRequest, aResponse) {
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
-		movieData = aResults;
+		movieData = aResults.movie;
+		var cDetails = aResults;
 
-		if (aResults) {
-			if(!aResults.local_img) {
+		if (movieData) {
+			if(!aResults.movie.local_img) {
 				fs.mkdirs(imgDir, function (err) {
 				  if (err) return console.error(err);
 
@@ -217,7 +218,7 @@ router.route('/movie-details/:id')
 				})
 			}
 
-			if (!aResults.local_thumb) {
+			if (!aResults.movie.local_thumb) {
 				fs.mkdirs(thumbDir, function (err) {
 				  if (err) return console.error(err);
 
@@ -230,13 +231,15 @@ router.route('/movie-details/:id')
 			}
 		}
 
-		if (!aResults) {
+		if (!aResults.movie) {
 			mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults){
 				movieData = aResults;
+
 				return aResponse.render('index', {
 					detailsView: true,
 					lang: locale,
-					movie : aResults
+					movie : movieData,
+					cDetails: cDetails
 				});
 			});
 		} else {
@@ -244,7 +247,7 @@ router.route('/movie-details/:id')
 				detailsView: true,
 				inCollection: true,
 				lang: locale,
-				movie : aResults
+				movie: movieData
 			});
 		}
 
@@ -254,6 +257,7 @@ router.route('/movie-details/:id')
 	movieData.collection_wanted = false;
 	moviesService.addMovie(movieData, aRequest.body, function (aError, aMovie) {
 		if (aError) {
+			console.error(aError);
 			return aResponse.render('index', {
 				detailsView: true,
 				movie: movieData,
@@ -269,25 +273,28 @@ router.route('/movie-details/:id')
 router.route('/movie-details/:id/edit')
 .get(function (aRequest, aResponse) {
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
-		movieData = aResults
+		console.log(aResults);
 		return aResponse.render('index', {
 			detailsView: true,
 			inCollection: true,
 			editable: true,
 			lang: locale,
-			movie: aResults
+			movie: aResults.movie,
+			cDetails: aResults
 		});
 	});
 })
 .post(function (aRequest, aResponse) {
 	moviesService.updateMovie(aRequest.params.id, aRequest.body, function (aError, aResults) {
 		if (aError) {
+			console.error(aError);
 			return aResponse.render('index', {
 				detailsView: true,
 				inCollection: true,
 				editable: true,
 				lang: locale,
-				movie: aResults
+				movie: aResults,
+				cDetails: aResults
 			});
 		}
 
@@ -366,6 +373,6 @@ router.route('/search-results/:location/:search')
 		searchQuery = encodeURIComponent(searchQuery);
 
 	aResponse.redirect('/search-results/' + location + '/' + searchQuery);
-})
+});
 
 module.exports = router;

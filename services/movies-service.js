@@ -1,4 +1,8 @@
 var Movie = require('../models/movies-model').Movies;
+var Locations = require('../models/movies-model').Locations;
+var Qualities = require('../models/movies-model').Qualities;
+var MediaTypes = require('../models/movies-model').MediaTypes;
+var async = require('async');
 
 exports.addMovie = function(aMovie, aForm, aNext) {
     var newMovie = new Movie({
@@ -15,9 +19,9 @@ exports.addMovie = function(aMovie, aForm, aNext) {
         tmdb_id             : aMovie.id,
         imdb_id             : aMovie.imdb_id,
         poster_path         : aMovie.poster_path,
-        collection_location : aForm.collection_location,
-        collection_quality  : aForm.collection_quality,
-        collection_media    : aForm.collection_media,
+        collection_location : aForm.collection_location || null,
+        collection_quality  : aForm.collection_quality || null,
+        collection_media    : aForm.collection_media || null,
         collection_watched  : aForm.collection_watched,
         collection_rating   : aForm.collection_rating,
         collection_wanted   : aMovie.wanted
@@ -58,15 +62,13 @@ exports.getAllMoviesCollection = function(aMovies, aPage, aLimit, aNext) {
         {
             page: aPage,
             limit: aLimit,
-            sortBy: {title: 1}
+            sortBy: {title: 1},
+            populate: 'collection_location'
         },
         function(aError, aMovies) {
             aNext(aError, aMovies, aCount);
         });
-
     });
-
-
 };
 
 exports.getAllWanted = function(aMovies, aPage, aLimit, aNext) {
@@ -171,17 +173,43 @@ exports.getAllByQuality = function (aTag, aNext) {
         sort: {title: 1},
         limit: 20
     },
-     function(aError, aMovies) {
-        console.log(aMovies)
+     function (aError, aMovies) {
         aNext(aError, aMovies);
     });
 }
 
 exports.findMovie = function(aMovie, aNext) {
-    Movie.findOne({
-        _id: aMovie
-    }, function(aError, aMovie) {
-        aNext(aError, aMovie);
+    async.parallel({
+        getLocations: function (aResult) {
+            Locations.find({})
+            .exec(aResult);
+        },
+        getMovie: function (aResult) {
+            Movie.findOne({_id: aMovie})
+                .populate('collection_location')
+                .populate('collection_quality')
+                .populate('collection_media')
+                .exec(aResult);
+        },
+        getQualities: function (aResult) {
+            Qualities.find({})
+                .exec(aResult);
+        },
+        getMediaTypes: function (aResult) {
+            MediaTypes.find({})
+                .exec(aResult);
+        }
+    },
+    function (aError, aResult) {
+        var aReturn = {};
+        aReturn = {
+            movie: aResult.getMovie,
+            locations: aResult.getLocations,
+            qualities: aResult.getQualities,
+            mediatypes: aResult.getMediaTypes
+        }
+
+        aNext(aError, aReturn);
     });
 };
 
@@ -195,9 +223,9 @@ exports.deleteTitle = function (aMovie, aNext) {
 
 exports.updateMovie = function(aMovie, aData, aNext) {
     Movie.update({_id: aMovie}, {
-        collection_location : aData.collection_location,
-        collection_quality  : aData.collection_quality,
-        collection_media    : aData.collection_media,
+        collection_location : aData.collection_location || null,
+        collection_quality  : aData.collection_quality || null,
+        collection_media    : aData.collection_media || null,
         collection_rating   : aData.collection_rating,
         collection_watched  : aData.collection_watched
     }, function(aError, numberAffected, rawResponse, aData) {

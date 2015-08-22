@@ -47,9 +47,9 @@ No results
 				</a>
 			  	</span>
 			  	<span class="list">
-			  		<a href="/collection/tags/location/{{ movie.collection_location }}">
+			  		<a href="/collection/tags/location/{{ movie.collection_location.location }}">
 			  	  	{% if movie.collection_location %}
-			  	  		<small class="tag tag-green">{{ movie.collection_location }}</small>
+			  	  		<small class="tag tag-green">{{ movie.collection_location.location }}</small>
 			  	  	{% else %}
 			  		  	<small class="tag">{{ lang.tags.unLocation }}</small>
 			  		{% endif %}

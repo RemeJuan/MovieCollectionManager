@@ -1,5 +1,5 @@
 <div class="mdl-card mdl-shadow--2dp mdl-grid movie-search-card">
-{{ error }}
+
 	<div class="img mdl-cell mdl-cell--4-col">
 	{% if movie.local_img %}
 		<img src="/images/w342{{movie.poster_path}}" width="342" height="513" />
@@ -65,4 +65,9 @@
 			{% include 'buttons/menu-button.html' %}
 		</div>
 	</form>
+</div>
+<div class="error-message">
+{% for err in error %}
+	{{ err.message }}
+{% endfor %}
 </div>
