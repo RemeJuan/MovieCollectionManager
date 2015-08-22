@@ -218,6 +218,33 @@ exports.findMovie = function(aMovie, aNext) {
     });
 };
 
+exports.prepAdmin = function(aMovie, aNext) {
+    async.parallel({
+        getLocations: function (aResult) {
+            Locations.find({})
+            .exec(aResult);
+        },
+        getQualities: function (aResult) {
+            Qualities.find({})
+                .exec(aResult);
+        },
+        getMediaTypes: function (aResult) {
+            MediaTypes.find({})
+                .exec(aResult);
+        }
+    },
+    function (aError, aResult) {
+        var aReturn = {};
+        aReturn = {
+            locations: aResult.getLocations,
+            qualities: aResult.getQualities,
+            mediatypes: aResult.getMediaTypes
+        }
+
+        aNext(aError, aReturn);
+    });
+};
+
 exports.deleteTitle = function (aMovie, aNext) {
     Movie.findOneAndRemove({
         _id: aMovie
@@ -272,4 +299,118 @@ exports.updateThumb = function(aMovie, aNext) {
        }
        aNext(null, aData);
     });
+};
+
+exports.adminUpdate = function(aCollection, aData, aNext) {
+    if (aCollection == 'locations') {
+        var id = aData.id || null;
+        Locations.findOneAndUpdate({_id: id }, {
+            location: aData.location
+        },
+        {
+            upsert: true
+        },
+        function(aError, numberAffected, rawResponse, aData) {
+           if (aError) { return aNext(aError); }
+           aNext(null, aData);
+        });
+    }
+
+    if (aCollection == 'qualities') {
+        var id = aData.id || null;
+        Qualities.findOneAndUpdate({_id: id }, {
+            quality: aData.quality
+        },
+        {
+            upsert: true
+        },
+        function(aError, numberAffected, rawResponse, aData) {
+           if (aError) { return aNext(aError); }
+           aNext(null, aData);
+        }); 
+    }
+
+    if (aCollection == 'mediatypes') {
+        var id = aData.id || null;
+        Qualities.findOneAndUpdate({_id: id }, {
+            media: aData.media
+        },
+        {
+            upsert: true
+        },
+        function(aError, numberAffected, rawResponse, aData) {
+           if (aError) { return aNext(aError); }
+           aNext(null, aData);
+        }); 
+    }
+
+};
+
+exports.adminSave = function(aCollection, aData, aNext) {
+    if (aCollection == 'locations') {
+        var newLocation = new Locations({
+            location : aData.location,
+        });
+
+        newLocation.save(function(aError) {
+            if (aError) {
+                return aNext(aError);
+            }
+            aNext(null);
+        });
+    }
+
+    if (aCollection == 'qualities') {
+        var newQuality = new Qualities({
+            quality : aData.quality,
+        });
+
+        newQuality.save(function(aError) {
+            if (aError) {
+                return aNext(aError);
+            }
+            aNext(null);
+        });
+    }
+
+    if (aCollection == 'mediatypes') {
+        var newMediaType = new MediaTypes({
+            media : aData.media,
+        });
+
+        newMediaType.save(function(aError) {
+            if (aError) {
+                return aNext(aError);
+            }
+            aNext(null);
+        });
+    }
+
+};
+
+exports.adminDelete = function(aCollection, aData, aNext) {
+    if (aCollection == 'locations') {
+        Locations.findOneAndRemove({
+            _id: aData
+        }, function(aError, aMovie) {
+            aNext(aError, aMovie);
+        });
+    }
+
+    if (aCollection == 'qualities') {
+        Qualities.findOneAndRemove({
+            _id: aData
+        }, function(aError, aMovie) {
+            aNext(aError, aMovie);
+        });
+    }
+
+    if (aCollection == 'mediatypes') {
+        MediaTypes.findOneAndRemove({
+            _id: aData
+        }, function(aError, aMovie) {
+            aNext(aError, aMovie);
+        });
+    }
+
 };

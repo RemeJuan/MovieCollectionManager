@@ -17,6 +17,7 @@ router.route('/')
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,
+			collection: true,
 			lang: locale,
 			movies : aMovies,
 			count: aItemCount,
@@ -38,6 +39,7 @@ router.route('/:page')
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,
+			collection: true,
 			lang: locale,
 			movies : aMovies,
 			count: aItemCount,
@@ -60,6 +62,7 @@ router.route('/tags/:query/:tag')
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,
+			collection: true,
 			lang: locale,
 			movies : aResults
 		});

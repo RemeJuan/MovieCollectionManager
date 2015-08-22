@@ -6,7 +6,8 @@
 		<select id="collection-location" name="collection_location" class="mdl-textfield__input">
 			<option {% if !movie.collection_location %} selected {% endif %}></option>
 			{% for loc in cDetails.locations %}
-				<option value="{{loc._id|safe}}" {% if movie.collection_location._id == loc._id %} selected {% endif %}>{{ loc.location }}</option>
+				<option value="{{loc._id|safe}}" {% if movie.collection_location.location|json == loc.location|json %} selected {% endif %}>{{ loc.location }}</option>
+				}
 			{% endfor %}
 		</select>
 	</div>
@@ -16,7 +17,7 @@
 		<select id="collection-quality" name="collection_quality" class="mdl-textfield__input">
 			<option {% if !movie.collection_quality %} selected {% endif %}></option>
 			{% for qual in cDetails.qualities %}
-				<option value="{{qual._id|safe}}" {% if movie.collection_quality == qual.quality %} selected {% endif %}>{{ qual.quality }}</option>
+				<option value="{{qual._id|safe}}" {% if movie.collection_quality.quality|json == qual.quality|json %} selected {% endif %}>{{ qual.quality }}</option>
 			{% endfor %}
 		</select>
 	</div>
@@ -26,7 +27,7 @@
 		<select id="collection-media" name="collection_media" class="mdl-textfield__input">
 			<option {% if !movie.collection_media %} selected {% endif %}></option>			
 			{% for media in cDetails.mediatypes %}
-				<option value="{{media._id|safe}}" {% if movie.collection_media == media.media %} selected {% endif %}>{{ media.media }}</option>
+				<option value="{{media._id|safe}}" {% if movie.collection_media.media|json == media.media|json %} selected {% endif %}>{{ media.media }}</option>
 			{% endfor %}
 		</select>
 	</div>
