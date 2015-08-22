@@ -13,14 +13,43 @@ var movieData, location, limit = 10, pagination = [],
 
 router.route('/')
 .get(function (aRequest, aResponse) {
+	moviesService.prepAdmin({}, function (aError, aResults) {
 		return aResponse.render('index', {
-			homeView: true,
+			adminView: true,
 			lang: locale,
-			movies : aMovies
+			admin: aResults
 		});
+	});
 })
 .post(function (aRequest, aResponse) {
 
+});
+
+router.route('/:collection/save')
+.post(function (aRequest, aResponse) {
+	moviesService.adminSave(aRequest.params.collection, aRequest.body, function (aError, aResults) {
+		if (aError) { console.error(aError) };
+
+		return aResponse.redirect('/admin');
+	});
+});
+
+router.route('/:collection/update')
+.post(function (aRequest, aResponse) {
+	moviesService.adminUpdate(aRequest.params.collection, aRequest.body, function (aError, aResults) {
+		if (aError) { console.error(aError) };
+
+		return aResponse.redirect('/admin');
+	});
+});
+
+router.route('/:collection/delete/:entry')
+.get(function (aRequest, aResponse) {
+	moviesService.adminDelete(aRequest.params.collection, aRequest.params.entry, function (aError, aResults) {
+		if (aError) { console.error(aError) };
+
+		return aResponse.redirect('/admin');
+	});
 });
 
 module.exports = router;	

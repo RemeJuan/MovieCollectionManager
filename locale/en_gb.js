@@ -6,6 +6,9 @@ var locale = {
 		cancelButt: 'Cancel',
 		unknown: 'Unknown',
 		searchCollection: 'Search Collection',
+		administration: 'Collection Administration',
+		myCollection: 'Movie Collection',
+		wantedCollection: 'Wanted movies'
 	},
 	homeView: {
 		mainHeading: 'Welcome',
@@ -35,10 +38,16 @@ var locale = {
 	listView: {
 
 	},
+	adminView: {
+		headingLocations: 'Media locations',
+		headingQualities: 'Media qualities',
+		headingTypes: 'Media Types'
+	},
 	navigation: {
 		home: 'Home',
 		collection: 'My Collection',
-		wanted: 'Wanted'
+		wanted: 'Wanted',
+		admin: 'Admin'
 	},
 	locations: [
 		'Media Server',

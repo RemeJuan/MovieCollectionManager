@@ -40,6 +40,11 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.7.0
+* Added in anew admin section to manage Qualities, Locations and Media Types.
+* Additional headings on certain pages.
+* Database optimize
+
 v0.6.0:
 * Added in wanted list for tracking movies you wish to add to your collection.
 * Added in pagiantion in both Wanted and My Collection List views.

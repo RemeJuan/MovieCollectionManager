@@ -1,14 +1,20 @@
-{% if movies.length == 0%}
+{% if movies.length == 0 %}
 No results
 {% endif %}
 
 {% if searchResults %}
+	{% set pageHeading = lang.global.searchResults %}
+{% elseif collection %}
+	{% set pageHeading = lang.global.myCollection %}
+{% elseif wanted %}
+	{% set pageHeading = lang.global.wantedCollection %}	
+{% endif %}
+
 <div class="mdl-card movie-search-card heading">
 	<div class="mdl-card__title">
-	  <h2 class="mdl-card__title-text">{{ lang.global.searchResults }}</h2>
+	  <h2 class="mdl-card__title-text">{{ pageHeading }}</h2>
 	</div>
 </div>
-{% endif %}
 
 {% for movie in movies %}
 <div class="mdl-card mdl-shadow--2dp mdl-grid movie-search-card">

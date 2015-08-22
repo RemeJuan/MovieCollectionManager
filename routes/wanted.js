@@ -19,6 +19,7 @@ router.route('/')
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,
+			wanted: true,
 			lang: locale,
 			movies : aMovies,
 			count: aCount,
@@ -40,6 +41,7 @@ router.route('/:page')
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,
+			wanted: true,
 			lang: locale,
 			movies : aMovies,
 			count: aCount,
