@@ -72,7 +72,7 @@ var locale = {
 		watched: 'Watched',
 		unwatched: 'Unwatched',
 		unLocation: 'Unknown Location',
-		unQuality: 'Unknown Location'
+		unQuality: 'Unknown Quality'
 	}
 };
 
