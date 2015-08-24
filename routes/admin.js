@@ -24,10 +24,15 @@ router.use(flash());
 router.route('/')
 .get(function (aRequest, aResponse) {
 	moviesService.prepAdmin({}, function (aError, aResults) {
+		var flashSuccess = aRequest.flash('success'),
+			flashError = aRequest.flash('error');
+
 		return aResponse.render('index', {
 			adminView: true,
 			lang: locale,
-			admin: aResults
+			admin: aResults,
+			success: flashSuccess,
+			error: flashError
 		});
 
 	});
@@ -39,7 +44,12 @@ router.route('/')
 router.route('/:collection/save')
 .post(function (aRequest, aResponse) {
 	moviesService.adminSave(aRequest.params.collection, aRequest.body, function (aError, aResults) {
-		if (aError) { console.error(aError) };
+		if (aError) { 
+			console.error(aError);
+			aRequest.flash('error', 'Entry not saved');
+		} else {
+			aRequest.flash('success', 'New entry added');
+		};
 
 		return aResponse.redirect('/admin');
 	});
@@ -48,8 +58,13 @@ router.route('/:collection/save')
 router.route('/:collection/update')
 .post(function (aRequest, aResponse) {
 	moviesService.adminUpdate(aRequest.params.collection, aRequest.body, function (aError, aResults) {
-		if (aError) { console.error(aError) };
-		aRequest.session.success = true;
+		if (aError) { 
+			console.error(aError);
+			aRequest.flash('error', 'Entry not updated');
+		} else {
+			aRequest.flash('success', 'New updated');
+		};
+
 		return aResponse.redirect('/admin');
 	});
 });
@@ -57,8 +72,13 @@ router.route('/:collection/update')
 router.route('/:collection/delete/:entry')
 .get(function (aRequest, aResponse) {
 	moviesService.adminDelete(aRequest.params.collection, aRequest.params.entry, function (aError, aResults) {
-		if (aError) { console.error(aError) };
-		aRequest.session.success = true;
+		if (aError) { 
+			console.error(aError);
+			aRequest.flash('error', 'Entry not deleted');
+		} else {
+			aRequest.flash('success', 'Entry deleted');
+		};
+
 		return aResponse.redirect('/admin');
 	});
 });

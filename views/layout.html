@@ -45,8 +45,14 @@
 	      {% endif %}
 	      {% include 'navigation.html' %}
 	      <!-- Notification toast -->
-	      <div class="md-toast {% if message or error %}toast-active{% endif %}">
-	        <span>{{message}} {{ error }}</span>
+	      <div class="md-toast {% if success.length > 0 or error.length > 0 %}toast-active{% endif %}">
+	      	{% for noti in success %}
+	        	<span>{{ noti }}</span>
+	        {% endfor %}
+
+	        {% for noti in error %}
+	          	<span>{{ noti }}</span>
+	        {% endfor %}
 	        <button class="mdl-button mdl-js-button">
 	        	<span>Close</span>
 	        </button>
