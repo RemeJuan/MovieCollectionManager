@@ -1,5 +1,5 @@
 <div class="mdl-card mdl-shadow--2dp mdl-grid movie-search-card">
-{{ error }}
+
 	<div class="img mdl-cell mdl-cell--4-col">
 	{% if movie.local_img %}
 		<img src="/images/w342{{movie.poster_path}}" width="342" height="513" />
@@ -47,9 +47,14 @@
 		<div class="cta">
 		<div id="menu" class="flyout-menu">
 		{% if !inCollection %}
+			{% include 'buttons/wanted-button.html' %}
 			{% include 'buttons/add-button.html' %}
 		{% elseif editable %}
 			{% include 'buttons/save-button.html' %}
+			{% include 'buttons/delete-button.html' %}
+			{% include 'buttons/cancel-button.html' %}
+		{% elseif movie.collection_wanted %}
+			{% include 'buttons/move-button.html' %}
 			{% include 'buttons/delete-button.html' %}
 			{% include 'buttons/cancel-button.html' %}
 		{% else %}
@@ -60,4 +65,9 @@
 			{% include 'buttons/menu-button.html' %}
 		</div>
 	</form>
+</div>
+<div class="error-message">
+{% for err in error %}
+	{{ err.message }}
+{% endfor %}
 </div>

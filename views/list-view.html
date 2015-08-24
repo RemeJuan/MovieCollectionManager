@@ -1,14 +1,20 @@
-{% if movies.length == 0%}
+{% if movies.length == 0 %}
 No results
 {% endif %}
 
 {% if searchResults %}
+	{% set pageHeading = lang.global.searchResults %}
+{% elseif collection %}
+	{% set pageHeading = lang.global.myCollection %}
+{% elseif wanted %}
+	{% set pageHeading = lang.global.wantedCollection %}	
+{% endif %}
+
 <div class="mdl-card movie-search-card heading">
 	<div class="mdl-card__title">
-	  <h2 class="mdl-card__title-text">{{ lang.global.searchResults }}</h2>
+	  <h2 class="mdl-card__title-text">{{ pageHeading }}</h2>
 	</div>
 </div>
-{% endif %}
 
 {% for movie in movies %}
 <div class="mdl-card mdl-shadow--2dp mdl-grid movie-search-card">
@@ -34,14 +40,65 @@ No results
 
 		<div class="mdl-card__supporting-text">
 		  {{ movie.overview }}
+
+		  	{% if !movie.collection_wanted and !movie.genre_ids %}
+			<div>
+				<span class="list">
+				  	{% if movie.collection_watched %}
+				  	<a href="/collection/tags/watched/{{ movie.collection_watched }}">
+				  		<small class="tag tag-red">{{ lang.tags.watched }}</small>
+				  	</a>
+				  	{% else %}
+					  	<small class="tag">{{ lang.tags.unwatched }}</small>
+					{% endif %}
+			  	</span>
+			  	<span class="list">
+			  	  	{% if movie.collection_location %}
+			  	  	<a href="/collection/tags/location/{{ movie.collection_location.location }}">
+			  	  		<small class="tag tag-green">{{ movie.collection_location.location }}</small>
+			  	  	</a>
+			  	  	{% else %}
+			  		  	<small class="tag">{{ lang.tags.unLocation }}</small>
+			  		{% endif %}
+			  	</span>			  	
+			  	<span class="list">
+			  		
+			  	  	{% if movie.collection_quality %}
+			  	  	<a href="/collection/tags/quality/{{ movie.collection_quality.quality }}">
+			  	  		<small class="tag tag-yellow">{{ movie.collection_quality.quality }}</small>
+			  	  	</a>
+			  	  	{% else %}
+			  		  	<small class="tag">{{ lang.tags.unQuality }}</small>
+			  		{% endif %}
+			  		
+			  	</span>
+			</div>
+			{% endif %}
+		  	<div class="list list-genres">
+			  	{% for genre in movie.genres %}
+			  		<a href="/collection/tags/genre/{{ genre.name }}">
+			  			<small class="tag tag-blue">{{ genre.name }}</small>
+			  		</a>
+			  	{% endfor %}
+		  	</div>
 		</div>
+
 	</div>
+
 	<div class="cta">
-		<a 	class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
-			href="/movie-details/{{ movie.id }}">
-		  <i class="material-icons">info</i>
-		</a>
+	{% include 'buttons/info-button.html' %}
 	</div>
 </div>
 {% endfor %}
 
+{% if pagination.length > 0 %}
+<div class="pagination  mdl-cell mdl-cell--12-col">Page: 
+{% for page in pagination %}
+	{% if page == currentPage %}
+		{{ page }} {% if !loop.last %} | {% endif %}
+	{% else %}
+		<a href="/collection/{{ page }}">{{ page }}</a>{% if !loop.last %} | {% endif %}
+	{% endif %}
+{% endfor %}
+</div>
+{% endif %}

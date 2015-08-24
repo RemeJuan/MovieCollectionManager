@@ -1,12 +1,13 @@
 <div class="mdl-card__supporting-text collection-details">
 	<h2 class="mdl-card__title-text">{{ lang.detailsView.collectionDetails }}</h2>
-	{% if !inCollection or editable %}
+	{% if !inCollection or editable or movie.collection_wanted %}
 	<div class="mdl-textfield mdl-js-textfield">
 		<label for="collection-location">{{ lang.detailsView.labels.location }}:</label>
 		<select id="collection-location" name="collection_location" class="mdl-textfield__input">
 			<option {% if !movie.collection_location %} selected {% endif %}></option>
-			{% for location in lang.locations %}
-				<option value="{{location}}" {% if movie.collection_location == location %} selected {% endif %}>{{location}}</option>
+			{% for loc in cDetails.locations %}
+				<option value="{{loc._id|safe}}" {% if movie.collection_location.location|json == loc.location|json %} selected {% endif %}>{{ loc.location }}</option>
+				}
 			{% endfor %}
 		</select>
 	</div>
@@ -15,8 +16,8 @@
 		<label for="collection-quality">{{ lang.detailsView.labels.quality }}:</label>
 		<select id="collection-quality" name="collection_quality" class="mdl-textfield__input">
 			<option {% if !movie.collection_quality %} selected {% endif %}></option>
-			{% for quality in lang.qualities %}
-				<option value="{{quality}}" {% if movie.collection_quality == quality %} selected {% endif %}>{{quality}}</option>
+			{% for qual in cDetails.qualities %}
+				<option value="{{qual._id|safe}}" {% if movie.collection_quality.quality|json == qual.quality|json %} selected {% endif %}>{{ qual.quality }}</option>
 			{% endfor %}
 		</select>
 	</div>
@@ -25,8 +26,8 @@
 		<label for="collection-media">{{ lang.detailsView.labels.mediaType }}:</label>
 		<select id="collection-media" name="collection_media" class="mdl-textfield__input">
 			<option {% if !movie.collection_media %} selected {% endif %}></option>			
-			{% for media in lang.mediaTypes %}
-				<option value="{{media}}" {% if movie.collection_media == media %} selected {% endif %}>{{media}}</option>
+			{% for media in cDetails.mediatypes %}
+				<option value="{{media._id|safe}}" {% if movie.collection_media.media|json == media.media|json %} selected {% endif %}>{{ media.media }}</option>
 			{% endfor %}
 		</select>
 	</div>
@@ -36,7 +37,7 @@
 		<select id="collection-rating" name="collection_rating" class="mdl-textfield__input">
 			<option {% if !movie.collection_rating %} selected {% endif %}></option>
 			{% for rating in lang.ratings %}
-				<option value="{{rating}}" {% if movie.collection_rating == rating %} selected {% endif %}>{{rating}}</option>
+				<option value="{{rating}}" {% if movie.collection_rating == rating %} selected {% endif %}>{{ rating }}</option>
 			{% endfor %}
 		</select>
 	</div>
@@ -51,13 +52,13 @@
 
 	{% else %}
 	<div class="mdl-textfield mdl-js-textfield">
-		<label for="collection-location">{{ lang.detailsView.labels.location }}:</label> {{ movie.collection_location or lang.global.unknown }}
+		<label for="collection-location">{{ lang.detailsView.labels.location }}:</label> {{ movie.collection_location.location or lang.global.unknown }}
 	</div>
 	<div class="mdl-textfield mdl-js-textfield">
-		<label for="collection-location">{{ lang.detailsView.labels.quality }}:</label> {{ movie.collection_quality or lang.global.unknown }}
+		<label for="collection-location">{{ lang.detailsView.labels.quality }}:</label> {{ movie.collection_quality.quality or lang.global.unknown }}
 	</div>
 	<div class="mdl-textfield mdl-js-textfield">
-		<label for="collection-location">{{ lang.detailsView.labels.mediaType }}:</label> {{ movie.collection_media or lang.global.unknown }}
+		<label for="collection-location">{{ lang.detailsView.labels.mediaType }}:</label> {{ movie.collection_media.media or lang.global.unknown }}
 	</div>
 	<div class="mdl-textfield mdl-js-textfield">
 		<label for="collection-location">{{ lang.detailsView.labels.rating }}:</label> {{ movie.collection_rating or lang.global.unknown }}

@@ -40,6 +40,22 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.7.0
+* Added in anew admin section to manage Qualities, Locations and Media Types.
+* Additional headings on certain pages.
+* Database optimize
+
+v0.6.0:
+* Added in wanted list for tracking movies you wish to add to your collection.
+* Added in pagiantion in both Wanted and My Collection List views.
+
+v0.5.1: 
+* Deleting a title now also deletes its associated images
+
+v0.5.0:
+* Added genreas as 'tags' on list view for a tag based search.
+* Added Location, Watched and Quality tags for additional filter options
+
 v0.4.0:
 * Images for movies are now automatically download
 * If a collection title's image has been downloaded the local one will be loaded instead of TMDB's

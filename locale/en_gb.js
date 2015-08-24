@@ -6,6 +6,9 @@ var locale = {
 		cancelButt: 'Cancel',
 		unknown: 'Unknown',
 		searchCollection: 'Search Collection',
+		administration: 'Collection Administration',
+		myCollection: 'Movie Collection',
+		wantedCollection: 'Wanted movies'
 	},
 	homeView: {
 		mainHeading: 'Welcome',
@@ -32,9 +35,19 @@ var locale = {
 			imdbSite: 'IMDB'
 		}
 	},
+	listView: {
+
+	},
+	adminView: {
+		headingLocations: 'Media locations',
+		headingQualities: 'Media qualities',
+		headingTypes: 'Media Types'
+	},
 	navigation: {
 		home: 'Home',
-		collection: 'My Collection'
+		collection: 'My Collection',
+		wanted: 'Wanted',
+		admin: 'Admin'
 	},
 	locations: [
 		'Media Server',
@@ -63,7 +76,13 @@ var locale = {
 		8,
 		9,
 		10
-	]
+	],
+	tags: {
+		watched: 'Watched',
+		unwatched: 'Unwatched',
+		unLocation: 'Unknown Location',
+		unQuality: 'Unknown Quality'
+	}
 };
 
 

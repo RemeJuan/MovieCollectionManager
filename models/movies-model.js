@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var movieService = require('../services/movies-service');
+var mongoosePaginate = require('mongoose-paginate');
 
 var movieSchema = new Schema({
     _id                 : {type: String, required: true, unique: true},
@@ -16,9 +17,9 @@ var movieSchema = new Schema({
     tmdb_id             : {type: String},
     imdb_id             : {type: String},
     poster_path         : {type: String},
-    collection_location : {type: String},
-    collection_quality  : {type: String},
-    collection_media    : {type: String},
+    collection_location : {type: Schema.Types.ObjectId, ref: "Locations"},
+    collection_quality  : {type: Schema.Types.ObjectId, ref: "Qualities"},
+    collection_media    : {type: Schema.Types.ObjectId, ref: "Mediatypes"},
     collection_watched  : {
         type: Boolean,
         default: false
@@ -38,11 +39,36 @@ var movieSchema = new Schema({
     local_thumb         : {
         type: Boolean,
         default: false
+    },
+    collection_wanted: {
+        type: Boolean,
+        default: false
     }
 });
 
+var locationSchema = new Schema({
+    location: {type: String, unique: true}
+});
+
+var qualitySchema = new Schema({
+    quality: {type: String, unique: true}
+});
+
+var mediaSchema = new Schema({
+    media: {type: String, unique: true}
+});
+
+
+movieSchema.plugin(mongoosePaginate);
+
 var Movies = mongoose.model('Movies', movieSchema);
+var Locations = mongoose.model('Locations', locationSchema);
+var Qualities = mongoose.model('Qualities', qualitySchema);
+var MediaTypes = mongoose.model('Mediatypes', mediaSchema);
 
 module.exports = {
-    Movies: Movies
+    Movies: Movies,
+    Locations: Locations,
+    Qualities: Qualities,
+    MediaTypes: MediaTypes
 };

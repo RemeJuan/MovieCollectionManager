@@ -5,10 +5,21 @@ var http = require('http');
 var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
 var downloader = require('downloader');
+var fs = require('fs-extra');
+var flash = require('connect-flash');
+var session = require('express-session');
 
-var movieData, location,
+var movieData, location, limit = 10, pagination = [],
 	imgDir = 'public/images/w342/',
 	thumbDir = 'public/images/w92/';
+
+router.use(session({
+	secret: 'keyboard cowboy',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { maxAge: 60000 }
+}));
+router.use(flash());
 
 /* GET home page. */
 router.route('/')
@@ -28,114 +39,11 @@ router.route('/')
 	aResponse.redirect('/search-results/tmdb/' + searchQuery);
 });
 
-router.route('/collection')
-.get(function (aRequest, aResponse) {
-	moviesService.getAllMoviesCollection({}, function (aError, aMovies) {
-		return aResponse.render('index', {
-			searchView: true,
-			searchable: true,
-			lang: locale,
-			movies : aMovies
-		});
-	});
-})
-.post(function (aRequest, aResponse) {
-	var searchQuery = aRequest.body.search,
-		searchQuery = encodeURIComponent(searchQuery);
-
-	aResponse.redirect('/search-results/collection/' + searchQuery);
-});
-
-router.route('/movie-details/:id')
-.get(function (aRequest, aResponse) {
-	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
-		movieData = aResults;
-
-		// Does not persist on Heroku instance
-		if (aResults) {
-			if(!aResults.local_img) {
-				downloader.download('http://image.tmdb.org/t/p/w342' + movieData.poster_path, imgDir);
-				downloader.on('done', function (aResponse) {
-					moviesService.updateImg(aRequest.params.id, function (aError, aResults) {});
-				});
-			}
-
-			if (!aResults.local_thumb) {
-				downloader.download('http://image.tmdb.org/t/p/w92' + movieData.poster_path, thumbDir);
-				downloader.on('done', function (aResponse) {
-					moviesService.updateThumb(aRequest.params.id, function (aError, aResults) {});
-				});
-			}
-		}
-
-		if (!aResults) {
-			mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults){
-				movieData = aResults;
-				return aResponse.render('index', {
-					detailsView: true,
-					lang: locale,
-					movie : aResults
-				});
-			});
-		} else {
-			return aResponse.render('index', {
-				detailsView: true,
-				inCollection: true,
-				lang: locale,
-				movie : aResults
-			});
-		}
-
-	});
-})
-.post(function (aRequest, aResponse) {
-	moviesService.addMovie(movieData, aRequest.body, function (aError, aMovie) {
-		if (aError) {
-			return aResponse.render('index', {
-				detailsView: true,
-				movie: movieData,
-				lang: locale,
-				error: aError
-			});
-		}
-
-		return aResponse.redirect('/movie-details/' + aRequest.params.id);
-	});
-});
-
-router.route('/movie-details/:id/edit')
-.get(function (aRequest, aResponse) {
-	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
-		movieData = aResults
-		return aResponse.render('index', {
-			detailsView: true,
-			inCollection: true,
-			editable: true,
-			lang: locale,
-			movie: aResults
-		});
-	});
-})
-.post(function (aRequest, aResponse) {
-	moviesService.updateMovie(aRequest.params.id, aRequest.body, function (aError, aResults) {
-		if (aError) {
-			return aResponse.render('index', {
-				detailsView: true,
-				inCollection: true,
-				editable: true,
-				lang: locale,
-				movie: aResults
-			});
-		}
-
-		return aResponse.redirect('/movie-details/' + aRequest.params.id);
-	})
-});
-
 router.route('/delete/:id')
 .get(function (aRequest, aResponse) {
-	moviesService.deleteTitle(aRequest.params.id, function (aError) {
+	moviesService.deleteTitle(aRequest.params.id, function (aError, aResults) {
 		if (aError) {
+			aRequest.flash('error', 'Entry not deleted');
 			return aResponse.render('index', {
 				detailsView: true,
 				inCollection: true,
@@ -146,50 +54,24 @@ router.route('/delete/:id')
 			});
 		}
 
-		return aResponse.redirect('/collection');
-	});
-});
+		aRequest.flash('success', 'Entry sucessfully deleted');
 
-router.route('/search-results/:location/:search')
-.get(function (aRequest, aResponse) {
-	location = aRequest.params.location;
-	if (location == 'tmdb') {
-		mdb.searchMovie({query: aRequest.params.search  }, function(aError, aResults){
-		  return aResponse.render('index', {
-		  	searchView: true,
-		  	searchable: true,
-		  	searchResults: true,
-		  	lang: locale,
-		  	movies : aResults.results
-		  });
-		});
-	} else {
-		moviesService.searchCollection(aRequest.params.search, function (aError, aResults) {
-			if (aError) {
-				console.log(aError);
-				return aResponse.render('index', {
-					detailsView: true,
-					lang: locale,
-					movie: movieData,
-					error: aError
+		if (aResults) {
+			if ( aResults.local_img ) {
+				fs.remove(imgDir + aResults.poster_path, function (err) {
+				  if (err) return console.error(err)
 				});
 			}
 
-			return aResponse.render('index', {
-				searchView: true,
-				searchable: true,
-				searchResults: true,
-				lang: locale,
-				movies : aResults
-			});
-		});
-	}
-})
-.post(function (aRequest, aResponse) {
-	var searchQuery = aRequest.body.search,
-		searchQuery = encodeURIComponent(searchQuery);
+			if ( aResults.local_thumb ) {
+				fs.remove(thumbDir + aResults.poster_path, function (err) {
+				  if (err) return console.error(err)
+				});
+			}
+		}
 
-	aResponse.redirect('/search-results/' + location + '/' + searchQuery);
-})
+		return aResponse.redirect('/collection');
+	});
+});
 
 module.exports = router;
