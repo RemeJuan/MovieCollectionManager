@@ -47,6 +47,38 @@ a {
 	}
 }
 
+.md-toast {
+    display: none;
+    position: absolute;
+    box-sizing: border-box;
+    align-items: center;
+    min-height: 48px;
+    padding-left: 24px;
+    padding-right: 24px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.26);
+    border-radius: 2px;
+    font-size: 14px;
+    cursor: default;
+    max-width: 100%;
+    max-height: 40px;
+    height: 24px;
+    z-index: 90;
+    opacity: 1;
+    transform: translate3d(0px, 0px, 0px) rotateZ(0deg);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0s;
+    background-color: #323232;
+    color: #FAFAFA;
+    right: 10px;
+    top: 70px;
+    &.toast-active {
+    	display: flex
+    }
+    button {
+    	color: #fff;
+    	margin-left: 20px;
+    }
+}
+
 .tag {
 	border-radius: 5px;
 	color: #fff;
