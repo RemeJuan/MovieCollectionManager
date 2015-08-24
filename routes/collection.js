@@ -3,13 +3,24 @@ var router = express.Router();
 var http = require('http');
 var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
+var flash = require('connect-flash');
+var session = require('express-session');
 
 var movieData, location, limit = 10, pagination = [];
+
+router.use(session({
+	secret: 'keyboard cowboy',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { maxAge: 60000 }
+}));
+router.use(flash());
 
 router.route('/')
 .get(function (aRequest, aResponse) {
 	moviesService.getAllMoviesCollection({}, 1, limit, function (aError, aMovies, aPageCount, aItemCount) {
-		var pagination = [];
+		var pagination = [], flashSuccess = aRequest.flash('success'),
+			flashError = aRequest.flash('error');
 		for (i = 1; i <= aPageCount; i++) {
 			pagination.push(i);
 		}
@@ -22,7 +33,9 @@ router.route('/')
 			movies : aMovies,
 			count: aItemCount,
 			pagination: pagination,
-			currentPage: 1
+			currentPage: 1,
+			success: flashSuccess,
+			error: flashError
 		});
 	});
 })
