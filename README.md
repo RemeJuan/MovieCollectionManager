@@ -40,6 +40,9 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.8.0:
+* Notification messages for various actions such as Add, Delete and Move.
+
 v0.7.0
 * Added in anew admin section to manage Qualities, Locations and Media Types.
 * Additional headings on certain pages.
