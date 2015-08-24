@@ -52,22 +52,17 @@ exports.getAllMovies = function(aMovies, aNext) {
 };
 
 exports.getAllMoviesCollection = function(aMovies, aPage, aLimit, aNext) {
-    Movie.count({
+    Movie.paginate({
         collection_wanted: {'$ne': true}
-    }, function (aError, aCount){
-
-        Movie.paginate({
-            collection_wanted: {'$ne': true}
-        },
-        {
-            page: aPage,
-            limit: aLimit,
-            sortBy: {title: 1},
-            populate: 'collection_location collection_media collection_quality'
-        },
-        function(aError, aMovies) {
-            aNext(aError, aMovies, aCount);
-        });
+    },
+    {
+        page: aPage,
+        limit: aLimit,
+        sortBy: {title: 1},
+        populate: 'collection_location collection_media collection_quality'
+    },
+    function(aError, aMovies, aPageCount, aItemCount) {
+        aNext(aError, aMovies, aPageCount, aItemCount);
     });
 };
 

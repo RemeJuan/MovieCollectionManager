@@ -4,8 +4,18 @@ var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
 var http = require('http');
 var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
+var flash = require('connect-flash');
+var session = require('express-session');
 
 var movieData, limit = 10, pagination = [];
+
+router.use(session({
+	secret: 'keyboard cowboy',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { maxAge: 60000 }
+}));
+router.use(flash());
 
 router.route('/')
 .get(function (aRequest, aResponse) {
@@ -65,13 +75,13 @@ router.route('/add/:id')
 		
 		moviesService.addMovie(movieData, {}, function (aError, aMovie) {
 			if (aError) {
-				return aResponse.render('index', {
-					detailsView: true,
-					movie: movieData,
-					lang: locale,
-					error: aError
-				});
+				
+				aRequest.flash('error', 'Entry not added to wanted list');
+
+				return aResponse.redirect('/movie-details/' + aRequest.params.id);
 			}
+
+			aRequest.flash('success', 'Entry added to wanted list');
 
 			return aResponse.redirect('/movie-details/' + aRequest.params.id);
 		});
@@ -82,15 +92,14 @@ router.route('/move/:id')
 .get(function (aRequest, aResponse) {
 	moviesService.moveToCollection(aRequest.params.id, function (aError, aResults) {
 		if (aError) {
-			return aResponse.render('index', {
-				detailsView: true,
-				inCollection: true,
-				editable: true,
-				lang: locale,
-				movie: aResults
-			});
+
+			aRequest.flash('error', 'Error moving entry to collection');
+
+			return aResponse.redirect('/movie-details/' + aRequest.params.id + '/edit');
 		}
 
+		aRequest.flash('success', 'Entry sucessfully moved to collection');
+		
 		return aResponse.redirect('/movie-details/' + aRequest.params.id + '/edit');
 	})
 });

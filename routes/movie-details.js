@@ -6,16 +6,27 @@ var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
 var downloader = require('downloader');
 var fs = require('fs-extra');
+var flash = require('connect-flash');
+var session = require('express-session');
 
 var movieData,
 	imgDir = 'public/images/w342/',
 	thumbDir = 'public/images/w92/';
 
+router.use(session({
+	secret: 'keyboard cowboy',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { maxAge: 60000 }
+}));
+router.use(flash());
+
 router.route('/:id')
 .get(function (aRequest, aResponse) {
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
 		movieData = aResults.movie;
-		var cDetails = aResults;
+		var cDetails = aResults, flashSuccess = aRequest.flash('success'),
+			flashError = aRequest.flash('error');
 
 		if (movieData) {
 			if(!aResults.movie.local_img) {
@@ -50,7 +61,9 @@ router.route('/:id')
 					detailsView: true,
 					lang: locale,
 					movie : movieData,
-					cDetails: cDetails
+					cDetails: cDetails,
+					success: flashSuccess,
+					error: flashError
 				});
 			});
 		} else {
@@ -58,7 +71,9 @@ router.route('/:id')
 				detailsView: true,
 				inCollection: true,
 				lang: locale,
-				movie: movieData
+				movie: movieData,
+				success: flashSuccess,
+				error: flashError
 			});
 		}
 
@@ -69,13 +84,13 @@ router.route('/:id')
 	moviesService.addMovie(movieData, aRequest.body, function (aError, aMovie) {
 		if (aError) {
 			console.error(aError);
-			return aResponse.render('index', {
-				detailsView: true,
-				movie: movieData,
-				lang: locale,
-				error: aError
-			});
+
+			aRequest.flash('error', 'Entry not added to collection');
+			
+			return aResponse.redirect('/movie-details/' + aRequest.params.id);
 		}
+
+		aRequest.flash('success', 'Entry added to collection');
 
 		return aResponse.redirect('/movie-details/' + aRequest.params.id);
 	});
@@ -84,14 +99,18 @@ router.route('/:id')
 router.route('/:id/edit')
 .get(function (aRequest, aResponse) {
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
-		console.log(aResults);
+		var flashSuccess = aRequest.flash('success'),
+			flashError = aRequest.flash('error');
+
 		return aResponse.render('index', {
 			detailsView: true,
 			inCollection: true,
 			editable: true,
 			lang: locale,
 			movie: aResults.movie,
-			cDetails: aResults
+			cDetails: aResults,
+			success: flashSuccess,
+			error: flashError
 		});
 	});
 })
@@ -99,15 +118,12 @@ router.route('/:id/edit')
 	moviesService.updateMovie(aRequest.params.id, aRequest.body, function (aError, aResults) {
 		if (aError) {
 			console.error(aError);
-			return aResponse.render('index', {
-				detailsView: true,
-				inCollection: true,
-				editable: true,
-				lang: locale,
-				movie: aResults,
-				cDetails: aResults
-			});
+			aRequest.flash('success', 'Entry not updated');
+
+			return aResponse.redirect('/movie-details/' + aRequest.params.id);
 		}
+
+		aRequest.flash('success', 'Entry successfully updated');
 
 		return aResponse.redirect('/movie-details/' + aRequest.params.id);
 	})

@@ -6,10 +6,20 @@ var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
 var downloader = require('downloader');
 var fs = require('fs-extra');
+var flash = require('connect-flash');
+var session = require('express-session');
 
 var movieData, location, limit = 10, pagination = [],
 	imgDir = 'public/images/w342/',
 	thumbDir = 'public/images/w92/';
+
+router.use(session({
+	secret: 'keyboard cowboy',
+	resave: false,
+	saveUninitialized: true,
+	cookie: { maxAge: 60000 }
+}));
+router.use(flash());
 
 /* GET home page. */
 router.route('/')
@@ -33,6 +43,7 @@ router.route('/delete/:id')
 .get(function (aRequest, aResponse) {
 	moviesService.deleteTitle(aRequest.params.id, function (aError, aResults) {
 		if (aError) {
+			aRequest.flash('error', 'Entry not deleted');
 			return aResponse.render('index', {
 				detailsView: true,
 				inCollection: true,
@@ -43,16 +54,20 @@ router.route('/delete/:id')
 			});
 		}
 
-		if ( aResults.local_img ) {
-			fs.remove(imgDir + aResults.poster_path, function (err) {
-			  if (err) return console.error(err)
-			});
-		}
+		aRequest.flash('success', 'Entry sucessfully deleted');
 
-		if ( aResults.local_thumb ) {
-			fs.remove(thumbDir + aResults.poster_path, function (err) {
-			  if (err) return console.error(err)
-			});
+		if (aResults) {
+			if ( aResults.local_img ) {
+				fs.remove(imgDir + aResults.poster_path, function (err) {
+				  if (err) return console.error(err)
+				});
+			}
+
+			if ( aResults.local_thumb ) {
+				fs.remove(thumbDir + aResults.poster_path, function (err) {
+				  if (err) return console.error(err)
+				});
+			}
 		}
 
 		return aResponse.redirect('/collection');
