@@ -43,7 +43,9 @@
 	        </div>
 	      </div>
 	      {% endif %}
-	      {% include 'navigation.html' %}
+	      <nav class="mdl-navigation mdl-layout--large-screen-only">
+		      {% include 'navigation.html' %}
+	      </nav>
 	      <!-- Notification toast -->
 	      <div class="md-toast {% if success.length > 0 or error.length > 0 %}toast-active{% endif %}">
 	      	{% for noti in success %}
@@ -62,7 +64,9 @@
 
 	  <div class="mdl-layout__drawer">
 	    <span class="mdl-layout-title">{{ lang.global.siteName }}</span>
-	    {% include 'navigation.html' %}
+	    <nav class="mdl-navigation">
+		    {% include 'navigation.html' %}
+		</nav>
 	  </div>
 	  <main class="mdl-layout__content">
 	    <div class="page-content">
