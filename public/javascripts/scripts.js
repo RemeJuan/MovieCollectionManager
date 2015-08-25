@@ -1,3 +1,6 @@
+var modalDialog = document.getElementById('modal-dialog'),
+	notification = document.getElementById('notification');
+
 Array.prototype.contains = function ( aValidation ) {
    for (i in this) {
        if (this[i] === aValidation) return true;
@@ -18,18 +21,15 @@ function toggleMenu () {
 }
 
 function deleteItem () {
-	var target = document.getElementById('modal-dialog');
-	target.classList.add('md-active');
+	modalDialog.classList.add('md-active');
 }
 
 function closeNotification() {
-	var target = document.getElementById('notification');
-	target.classList.remove('toast-active');
+	notification.classList.remove('toast-active');
 }
 
 function closeModal() {
-	var target = document.getElementById('modal-dialog');
-	target.classList.remove('md-active');
+	modalDialog.classList.remove('md-active');
 }
 
 document.addEventListener("DOMContentLoaded", function(event) { 
