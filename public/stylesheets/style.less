@@ -26,11 +26,22 @@ a {
 }
 
 .flyout-menu {
+	max-height: 0;
 	display: none;
-	width: 56px;
-	z-index: 10;
+	-webkit-transition: max-height 3s ease-out;
+	-moz-transition: max-height 3s ease-out;
+	-o-transition: max-height 3s ease-out;
+	transition: max-height 3s ease-out;
+	&.open {
+		display: block;
+		max-height: 200px;
+		.menu-item {
+			height: 56px;
+		}
+	}
 	.menu-item {
-		margin-bottom: 7px
+		margin-bottom: 7px;
+		height: 0
 	}
 }
 
