@@ -19,10 +19,9 @@ router.use(flash());
 
 router.route('/')
 .get(function (aRequest, aResponse) {
-	moviesService.getAllWanted({}, 1, limit, function (aError, aMovies, aCount){
-		var total = Math.round(aCount / limit),
-			pagination = [];
-		for (i = 1; i <= total; i++) {
+	moviesService.getAllWanted({}, 1, limit, function (aError, aMovies, aPageCount, aItemCount) {
+		var pagination = [];
+		for (i = 1; i <= aPageCount; i++) {
 			pagination.push(i);
 		}
 
@@ -32,7 +31,7 @@ router.route('/')
 			wanted: true,
 			lang: locale,
 			movies : aMovies,
-			count: aCount,
+			count: aItemCount,
 			pagination: pagination,
 			currentPage: 1
 		});

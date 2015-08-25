@@ -1,21 +1,39 @@
+Array.prototype.contains = function ( aValidation ) {
+   for (i in this) {
+       if (this[i] === aValidation) return true;
+   }
+   return false;
+}
+
 function toggleMenu () {
-	$('#menu').slideToggle(350);
+	var target = document.getElementById('menu'),
+		classes = target.classList;
+		
+	if ( !classes.contains('open') ) {
+		target.classList.add('open');
+	} else {
+		target.classList.remove('open');
+	}
+
 }
 
 function deleteItem () {
-	$('#modal-dialog').addClass('md-active');
+	var target = document.getElementById('modal-dialog');
+	target.classList.add('md-active');
 }
 
 function closeNotification() {
-	$('.md-toast').removeClass('toast-active');
+	var target = document.getElementById('notification');
+	target.classList.remove('toast-active');
 }
 
-$('#modal-cancel').on('click', function () {
-	$('#modal-dialog').removeClass('md-active');
-});
+function closeModal() {
+	var target = document.getElementById('modal-dialog');
+	target.classList.remove('md-active');
+}
 
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function(event) { 
 	setTimeout(function() {
-		$('.md-toast').removeClass('toast-active');
+		closeNotification();
 	}, 3000)
 });

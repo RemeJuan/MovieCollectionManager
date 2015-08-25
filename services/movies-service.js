@@ -67,22 +67,16 @@ exports.getAllMoviesCollection = function(aMovies, aPage, aLimit, aNext) {
 };
 
 exports.getAllWanted = function(aMovies, aPage, aLimit, aNext) {
-    Movie.count({
+    Movie.paginate({
         collection_wanted: true
     },
-    function (aError, aCount) {
-
-        Movie.paginate({
-            collection_wanted: true
-        },
-        {
-            page: aPage,
-            limit: aLimit,
-            sortBy: {title: 1}
-        },
-        function(aError, aMovies) {
-            aNext(aError, aMovies, aCount);
-        });
+    {
+        page: aPage,
+        limit: aLimit,
+        sortBy: {title: 1}
+    },
+    function(aError, aMovies, aPageCount, aItemCount) {
+        aNext(aError, aMovies, aPageCount, aItemCount);
     });
 };
 
@@ -101,22 +95,18 @@ exports.searchWanted = function(aMovies, aNext) {
 };
 
 exports.searchCollection = function (movieTitle, aPage, aLimit, aNext) {
-    Movie.count({
+    Movie.paginate({
         title: {'$regex': new RegExp(movieTitle, 'i')}
     },
-    function (aError, aCount) {
-        Movie.paginate({
-            title: {'$regex': new RegExp(movieTitle, 'i')}
-        },
-        {
-            page: aPage,
-            limit: aLimit,
-            sortBy: {title: 1},
-            populate: 'collection_location collection_media collection_quality'
-        }, function (aError, aMovies, aPageCount, aItemCount) {
-            aNext(aError, aMovies, aPageCount, aItemCount);
-        });
+    {
+        page: aPage,
+        limit: aLimit,
+        sortBy: {title: 1},
+        populate: 'collection_location collection_media collection_quality'
+    }, function (aError, aMovies, aPageCount, aItemCount) {
+        aNext(aError, aMovies, aPageCount, aItemCount);
     });
+
 }
 
 exports.getAllByTag = function (aTag, aNext) {
