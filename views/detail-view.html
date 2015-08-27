@@ -23,7 +23,8 @@
 		  	<small>
 		  		{{ lang.detailsView.labels.genres }}: 
 		  		{% for genre in movie.genres %}
-		  			{{genre.name}}
+		  			{% if !loop.first %} , {% endif %}
+		  			{{ genre }}
 		  		{% endfor %}
 		  		| {{ lang.detailsView.labels.runtime }}: {{ movie.runtime }} min
 		  		| {{ lang.detailsView.labels.location }}: {{ movie.vote_average }} {{ lang.detailsView.labels.from }} {{ movie.vote_count }} {{ lang.detailsView.labels.votes }}

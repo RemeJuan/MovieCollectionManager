@@ -14,7 +14,6 @@ var movieSchema = new Schema({
     vote_count          : {type: String},
     overview            : {type: String},
     homepage            : {type: String},
-    tmdb_id             : {type: String},
     imdb_id             : {type: String},
     poster_path         : {type: String},
     collection_location : {type: Schema.Types.ObjectId, ref: "Locations"},

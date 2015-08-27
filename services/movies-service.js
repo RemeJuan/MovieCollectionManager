@@ -5,18 +5,21 @@ var MediaTypes = require('../models/movies-model').MediaTypes;
 var async = require('async');
 
 exports.addMovie = function(aMovie, aForm, aNext) {
+    var genres = [];
+    aMovie.genres.forEach(function(aItem) {
+        genres.push(aItem.name);
+    });
     var newMovie = new Movie({
         _id                 : aMovie.id,
         title               : aMovie.title,
         tagline             : aMovie.tagline,
         release_date        : aMovie.release_date,
-        genres              : aMovie.genres,
+        genres              : genres,
         runtime             : aMovie.runtime,
         vote_average        : aMovie.vote_average,
         vote_count          : aMovie.vote_count,
         overview            : aMovie.overview,
         homepage            : aMovie.homepage,
-        tmdb_id             : aMovie.id,
         imdb_id             : aMovie.imdb_id,
         poster_path         : aMovie.poster_path,
         collection_location : aForm.collection_location || null,
