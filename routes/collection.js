@@ -16,14 +16,20 @@ router.use(session({
 }));
 router.use(flash());
 
+function buildPagination(aPageCount) {
+	pagination = [];
+	for (i = 1; i <= aPageCount; i++) {
+		pagination.push(i);
+	}
+}
+
 router.route('/')
 .get(function (aRequest, aResponse) {
 	moviesService.getAllMoviesCollection({}, 1, limit, function (aError, aMovies, aPageCount, aItemCount) {
-		var pagination = [], flashSuccess = aRequest.flash('success'),
+		var flashSuccess = aRequest.flash('success'),
 			flashError = aRequest.flash('error');
-		for (i = 1; i <= aPageCount; i++) {
-			pagination.push(i);
-		}
+			
+		buildPagination(aPageCount);
 
 		return aResponse.render('index', {
 			searchView: true,
@@ -49,6 +55,9 @@ router.route('/')
 router.route('/:page')
 .get(function (aRequest, aResponse) {
 	moviesService.getAllMoviesCollection({}, aRequest.params.page, limit, function (aError, aMovies, aPageCount, aItemCount) {
+
+		buildPagination(aPageCount);
+
 		return aResponse.render('index', {
 			searchView: true,
 			searchable: true,

@@ -119,25 +119,36 @@ exports.getAllByTag = function (aTag, aNext) {
         null,
     {
         sort: {title: 1},
-        limit: 20
+        limit: 20,
+        populate: 'collection_location collection_media collection_quality'
     },
      function(aError, aMovies) {
-        console.log(aMovies)
+        console.log(aMovies);
         aNext(aError, aMovies);
     });
 }
 
 exports.getAllByLocation = function (aTag, aNext) {
+    var getId = function () {
+        Locations.findOne({
+            location: aTag
+        },
+        function(aError, aLocation) {
+            return aLocation._id;
+        });
+    };
+
     Movie.find({
-        collection_location : aTag
+        collection_location : getId()
     },
         null,
     {
         sort: {title: 1},
-        limit: 20
+        limit: 20,
+        populate: 'collection_location collection_media collection_quality'
     },
      function(aError, aMovies) {
-        console.log(aMovies)
+        console.log(aMovies);
         aNext(aError, aMovies);
     });
 }
@@ -149,24 +160,35 @@ exports.getAllByWatched = function (aTag, aNext) {
         null,
     {
         sort: {title: 1},
-        limit: 20
+        limit: 20,
+        populate: 'collection_location collection_media collection_quality'
     },
      function(aError, aMovies) {
-        console.log(aMovies)
         aNext(aError, aMovies);
     });
 }
 
 exports.getAllByQuality = function (aTag, aNext) {
+    var getId = function () {
+        Qualities.findOne({
+            quality: aTag
+        },
+        function(aError, aLocation) {
+            return aLocation._id;
+        });
+    };
+
     Movie.find({
-        collection_quality : aTag
+        collection_quality : getId()
     },
         null,
     {
         sort: {title: 1},
-        limit: 20
+        limit: 20,
+        populate: 'collection_location collection_media collection_quality'
     },
      function (aError, aMovies) {
+        console.log(aMovies);
         aNext(aError, aMovies);
     });
 }
