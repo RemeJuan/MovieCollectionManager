@@ -1,0 +1,28 @@
+<div id="group-details" class="mdl-card__supporting-text group-details mdl-cell mdl-cell--6-col hidden">
+	<h2 class="mdl-card__title-text">Other titles in this set:</h2>
+
+	<div id="group-form">
+		  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+		    <input class="mdl-textfield__input" type="text" id="{{ loc._id|safe }}" name="location" value="{{ loc.location }}" onkeyup="groupSearch(this)" />
+		    <input name="id" type="hidden" value="{{ loc._id|safe }}">
+		    <label class="mdl-textfield__label" for="{{ loc._id|safe }}">Location</label>
+		  </div>
+		  <button id="button-{{ loc._id|safe }}-new" type="submit" class="mdl-button mdl-js-button mdl-button--icon">
+		    <i class="material-icons">save</i>
+		  </button>
+		  <div class="mdl-tooltip" for="button-{{ loc._id|safe }}-new">
+		  	Update record
+		  </div>
+		  <a id="button-{{ loc._id|safe }}-delete" class="mdl-button mdl-js-button mdl-button--icon" href="/admin/locations/delete/{{ loc._id|safe }}">
+		    <i class="material-icons">remove</i>
+		  </a>
+		  <div class="mdl-tooltip" for="button-{{ loc._id|safe }}-delete">
+		  	Delete
+		  </div>
+		<div class="searchBox">
+			<ul id="searchList">
+				<li></li>
+			</ul>
+		</div>
+	</div>
+</div>

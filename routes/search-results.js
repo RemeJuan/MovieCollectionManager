@@ -7,6 +7,19 @@ var locale = require('../locale/en_gb');
 
 var movieData, location, limit = 10, pagination = [];
 
+router.route('/group-search/:query')
+.get(function (aRequest, aResponse) {
+	moviesService.searchForGroups(aRequest.params.query, function (aError, aResults) {
+
+		if (aError) {
+			console.error(aError);
+			return;
+		}
+
+		aResponse.end(JSON.stringify(aResults));
+	});
+});
+
 router.route('/:location/:search')
 .get(function (aRequest, aResponse) {
 	location = aRequest.params.location;

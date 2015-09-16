@@ -106,7 +106,6 @@ exports.searchCollection = function (movieTitle, aPage, aLimit, aNext) {
     }, function (aError, aMovies, aPageCount, aItemCount) {
         aNext(aError, aMovies, aPageCount, aItemCount);
     });
-
 }
 
 exports.getAllByTag = function (aTag, aNext) {
@@ -398,4 +397,17 @@ exports.adminDelete = function(aCollection, aData, aNext) {
         });
     }
 
+};
+
+exports.searchForGroups = function(movieTitle, aNext) {
+    Movie.find({
+        title: {'$regex': new RegExp(movieTitle, 'i')}
+    },
+        '_id title',
+    {
+        sort: {title: 1}
+    },
+     function (aError, aMovies) {
+        aNext(aError, aMovies);
+    });
 };

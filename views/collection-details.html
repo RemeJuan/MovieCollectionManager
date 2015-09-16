@@ -1,4 +1,4 @@
-<div class="mdl-card__supporting-text collection-details">
+<div class="mdl-card__supporting-text collection-details mdl-cell mdl-cell--6-col">
 	<h2 class="mdl-card__title-text">{{ lang.detailsView.collectionDetails }}</h2>
 	{% if !inCollection or editable or movie.collection_wanted %}
 	<div class="mdl-textfield mdl-js-textfield">
@@ -47,6 +47,13 @@
 		<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="collection_watched">
 		  <input type="checkbox" id="collection_watched" name="collection_watched" class="mdl-checkbox__input"
 		  {% if movie.collection_watched %} checked {% endif %} />
+		</label>
+	</div>
+
+	<div class="mdl-check mdl-checkbox">
+		<label for="collection-ingroup">Part of a set?:</label>
+		<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="collection_ingroup">
+		  <input type="checkbox" id="collection_ingroup" name="collection_ingroup" class="mdl-checkbox__input" onclick="toggleCollectionPane(this)" />
 		</label>
 	</div>
 
