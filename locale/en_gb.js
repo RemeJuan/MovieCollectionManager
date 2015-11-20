@@ -55,7 +55,8 @@ var locale = {
 		collection: 'My Collection',
 		wanted: 'Wanted',
 		admin: 'Admin',
-		login: 'Login'
+		login: 'Login',
+		logout: 'Logout'
 	},
 	locations: [
 		'Media Server',
