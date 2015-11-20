@@ -1,10 +1,10 @@
 var bcrypt = require('bcrypt-nodejs'),
-		User = require('../models/user').User;
+		User = require('../models/users-model').Users;
 
-exports.findUser = function(email, next) {
+exports.findUser = function(aEmail, aNext) {
   User.findOne({
-    email: email.toLowerCase()
-  }, function(err, user) {
-    next(err, user);
+    email: aEmail.toLowerCase()
+  }, function(aError, aUser) {
+    aNext(aError, aUser);
   });
 };
