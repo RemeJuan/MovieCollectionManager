@@ -13,20 +13,15 @@ var movieData,
 	imgDir = 'public/images/w342/',
 	thumbDir = 'public/images/w92/';
 
-router.use(session({
-	secret: 'keyboard cowboy',
-	resave: false,
-	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
-}));
 router.use(flash());
 
 router.route('/:id')
 .get(function (aRequest, aResponse) {
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
-		movieData = aResults.movie;
 		var cDetails = aResults, flashSuccess = aRequest.flash('success'),
 			flashError = aRequest.flash('error');
+
+		movieData = aResults.movie;
 
 		if (movieData) {
 			if(!aResults.movie.local_img) {
@@ -36,7 +31,7 @@ router.route('/:id')
 				  	downloader.download('http://image.tmdb.org/t/p/w342' + movieData.poster_path, imgDir);
 				  	downloader.on('done', function (aResponse) {
 				  		moviesService.updateImg(aRequest.params.id, function (aError, aResults) {});
-				  	});				
+				  	});
 				})
 			}
 
@@ -54,27 +49,33 @@ router.route('/:id')
 		}
 
 		if (!aResults.movie) {
-			mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults){
+			mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults) {
+				var vm = {
+					detailsView	: true,
+					user 				: aRequest.user || null,
+					lang				: locale,
+					movie 			: movieData,
+					cDetails 		: cDetails,
+					success 		: flashSuccess,
+					error 			: flashError
+				};
+
 				movieData = aResults;
 
-				return aResponse.render('index', {
-					detailsView: true,
-					lang: locale,
-					movie : movieData,
-					cDetails: cDetails,
-					success: flashSuccess,
-					error: flashError
-				});
+				return aResponse.render('index', vm);
 			});
 		} else {
-			return aResponse.render('index', {
-				detailsView: true,
-				inCollection: true,
-				lang: locale,
-				movie: movieData,
-				success: flashSuccess,
-				error: flashError
-			});
+			var vm = {
+				detailsView		: true,
+				user 					: aRequest.user || null,
+				inCollection	: true,
+				lang					: locale,
+				movie 				: movieData,
+				success 			: flashSuccess,
+				error 				: flashError
+			};
+
+			return aResponse.render('index', vm);
 		}
 
 	});
@@ -86,7 +87,7 @@ router.route('/:id')
 			console.error(aError);
 
 			aRequest.flash('error', 'Entry not added to collection');
-			
+
 			return aResponse.redirect('/movie-details/' + aRequest.params.id);
 		}
 
@@ -100,18 +101,20 @@ router.route('/:id/edit')
 .get(function (aRequest, aResponse) {
 	moviesService.findMovie(aRequest.params.id, function (aError, aResults) {
 		var flashSuccess = aRequest.flash('success'),
-			flashError = aRequest.flash('error');
+			flashError = aRequest.flash('error'),
+			vm = {
+			detailsView 	: true,
+			inCollection	: true,
+			editable			: true,
+			user 					: aRequest.user || null,
+			lang					: locale,
+			movie 				: aResults.movie,
+			cDetails 			: aResults,
+			success 			: flashSuccess,
+			error 				: flashError
+		};
 
-		return aResponse.render('index', {
-			detailsView: true,
-			inCollection: true,
-			editable: true,
-			lang: locale,
-			movie: aResults.movie,
-			cDetails: aResults,
-			success: flashSuccess,
-			error: flashError
-		});
+		return aResponse.render('index', vm);
 	});
 })
 .post(function (aRequest, aResponse) {
