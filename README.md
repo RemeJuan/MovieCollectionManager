@@ -40,6 +40,15 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.9.0:
+* Initial user access controls.
+  * Login and basic User Access controls setup
+    * Only logged in users are able to modfy the collection and wish list
+    * All users are able to view the colelction and perform searches
+
+This is simply the initial work, user creation or a default user will come in
+a later update.
+
 v0.8.0:
 * Notification messages for various actions such as Add, Delete and Move.
 
@@ -52,7 +61,7 @@ v0.6.0:
 * Added in wanted list for tracking movies you wish to add to your collection.
 * Added in pagiantion in both Wanted and My Collection List views.
 
-v0.5.1: 
+v0.5.1:
 * Deleting a title now also deletes its associated images
 
 v0.5.0:
