@@ -8,6 +8,11 @@ var cons = require('consolidate');
 var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
 var mongoose = require('mongoose');
 
+var passport = require('passport');
+var expressSession = require('express-session');
+var flash = require('connect-flash');
+var connectMongo = require('connect-mongo');
+
 var index = require('./routes/index');
 var collection = require('./routes/collection');
 var search = require('./routes/search-results');
@@ -28,12 +33,28 @@ app.engine('html', cons.swig);
 app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+var MongoStore = connectMongo(expressSession);
+
+app.use(expressSession(
+  {
+    secret: 'getting hungry',
+    saveUninitialized: false,
+    resave: false,
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection
+    })
+  }
+));
+
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', index);
 app.use('/collection', collection);
