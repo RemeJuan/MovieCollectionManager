@@ -17,5 +17,13 @@
 	{% if adminView %}
 	    {% include 'admin-view.html' %}
 	{% endif %}
-	
+
+	{% if loginView %}
+	    {% include 'login.html' %}
+	{% endif %}
+
+	{% if registerView %}
+	    {% include 'register.html' %}
+	{% endif %}
+
 {% endblock %}

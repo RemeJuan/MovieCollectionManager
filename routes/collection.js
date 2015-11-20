@@ -8,12 +8,6 @@ var session = require('express-session');
 
 var movieData, location, limit = 10, pagination = [];
 
-router.use(session({
-	secret: 'keyboard cowboy',
-	resave: false,
-	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
-}));
 router.use(flash());
 
 function buildPagination(aPageCount) {
@@ -27,22 +21,24 @@ router.route('/')
 .get(function (aRequest, aResponse) {
 	moviesService.getAllMoviesCollection({}, 1, limit, function (aError, aMovies, aPageCount, aItemCount) {
 		var flashSuccess = aRequest.flash('success'),
-			flashError = aRequest.flash('error');
-			
+			flashError = aRequest.flash('error')
+			vm = {
+			searchView	: true,
+			searchable 	: true,
+			collection 	: true,
+			user 				: aRequest.user || null,
+			lang				: locale,
+			movies 			: aMovies,
+			count 			: aItemCount,
+			pagination 	: pagination,
+			currentPage : 1,
+			success 		: flashSuccess,
+			error 			: flashError
+		};
+
 		buildPagination(aPageCount);
 
-		return aResponse.render('index', {
-			searchView: true,
-			searchable: true,
-			collection: true,
-			lang: locale,
-			movies : aMovies,
-			count: aItemCount,
-			pagination: pagination,
-			currentPage: 1,
-			success: flashSuccess,
-			error: flashError
-		});
+		return aResponse.render('index', vm);
 	});
 })
 .post(function (aRequest, aResponse) {
@@ -55,19 +51,21 @@ router.route('/')
 router.route('/:page')
 .get(function (aRequest, aResponse) {
 	moviesService.getAllMoviesCollection({}, aRequest.params.page, limit, function (aError, aMovies, aPageCount, aItemCount) {
+		var vm = {
+			searchView 	: true,
+			searchable 	: true,
+			collection 	: true,
+			user 				: aRequest.user || null,
+			lang 				: locale,
+			movies 			: aMovies,
+			count 			: aItemCount,
+			pagination 	: pagination,
+			currentPage : aRequest.params.page
+		};
 
 		buildPagination(aPageCount);
 
-		return aResponse.render('index', {
-			searchView: true,
-			searchable: true,
-			collection: true,
-			lang: locale,
-			movies : aMovies,
-			count: aItemCount,
-			pagination: pagination,
-			currentPage: aRequest.params.page
-		});
+		return aResponse.render('index', vm);
 	});
 })
 .post(function (aRequest, aResponse) {
@@ -81,13 +79,16 @@ router.route('/tags/:query/:tag')
 .get(function (aRequest, aResponse) {
 	var query = aRequest.params.query;
 	function returnResponse(aResults) {
-		return aResponse.render('index', {
-			searchView: true,
-			searchable: true,
-			collection: true,
-			lang: locale,
-			movies : aResults
-		});
+		var vm = {
+			searchView  : true,
+			searchable  : true,
+			collection 	: true,
+			user 				: aRequest.user || null,
+			lang 				: locale,
+			movies 			: aResults
+		};
+
+		return aResponse.render('index', vm);
 	}
 	if (query == 'genre') {
 		moviesService.getAllByTag(aRequest.params.tag, function (aError, aResults) {

@@ -38,6 +38,13 @@ var locale = {
 	listView: {
 
 	},
+	loginView: {
+		title: 'Login',
+		email: 'E-Mail Address',
+		password: 'Password',
+		forgotPassword: 'Forgotten password?',
+		submit: 'Login'
+	},
 	adminView: {
 		headingLocations: 'Media locations',
 		headingQualities: 'Media qualities',
@@ -47,7 +54,9 @@ var locale = {
 		home: 'Home',
 		collection: 'My Collection',
 		wanted: 'Wanted',
-		admin: 'Admin'
+		admin: 'Admin',
+		login: 'Login',
+		logout: 'Logout'
 	},
 	locations: [
 		'Media Server',

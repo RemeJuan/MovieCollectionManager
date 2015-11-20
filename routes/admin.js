@@ -13,28 +13,23 @@ var movieData, location, limit = 10, pagination = [], messageSent,
 	imgDir = 'public/images/w342/',
 	thumbDir = 'public/images/w92/';
 
-router.use(session({
-	secret: 'keyboard cowboy',
-	resave: false,
-	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
-}))
 router.use(flash());
 
 router.route('/')
 .get(function (aRequest, aResponse) {
 	moviesService.prepAdmin({}, function (aError, aResults) {
 		var flashSuccess = aRequest.flash('success'),
-			flashError = aRequest.flash('error');
+			flashError = aRequest.flash('error'),
+			vm = {
+				adminView	: true,
+				user 			: aRequest.user || null,
+				lang			: locale,
+				admin 		: aResults,
+				success 	: flashSuccess,
+				error 		: flashError
+			};
 
-		return aResponse.render('index', {
-			adminView: true,
-			lang: locale,
-			admin: aResults,
-			success: flashSuccess,
-			error: flashError
-		});
-
+		return aResponse.render('index', vm);
 	});
 })
 .post(function (aRequest, aResponse) {
@@ -44,7 +39,7 @@ router.route('/')
 router.route('/:collection/save')
 .post(function (aRequest, aResponse) {
 	moviesService.adminSave(aRequest.params.collection, aRequest.body, function (aError, aResults) {
-		if (aError) { 
+		if (aError) {
 			console.error(aError);
 			aRequest.flash('error', 'Entry not saved');
 		} else {
@@ -58,7 +53,7 @@ router.route('/:collection/save')
 router.route('/:collection/update')
 .post(function (aRequest, aResponse) {
 	moviesService.adminUpdate(aRequest.params.collection, aRequest.body, function (aError, aResults) {
-		if (aError) { 
+		if (aError) {
 			console.error(aError);
 			aRequest.flash('error', 'Entry not updated');
 		} else {
@@ -72,7 +67,7 @@ router.route('/:collection/update')
 router.route('/:collection/delete/:entry')
 .get(function (aRequest, aResponse) {
 	moviesService.adminDelete(aRequest.params.collection, aRequest.params.entry, function (aError, aResults) {
-		if (aError) { 
+		if (aError) {
 			console.error(aError);
 			aRequest.flash('error', 'Entry not deleted');
 		} else {
@@ -83,4 +78,4 @@ router.route('/:collection/delete/:entry')
 	});
 });
 
-module.exports = router;	
+module.exports = router;

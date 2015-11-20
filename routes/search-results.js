@@ -12,14 +12,17 @@ router.route('/:location/:search')
 	location = aRequest.params.location;
 
 	if (location == 'tmdb') {
-		mdb.searchMovie({query: aRequest.params.search  }, function(aError, aResults){
-		  return aResponse.render('index', {
-		  	searchView: true,
-		  	searchable: true,
-		  	searchResults: true,
-		  	lang: locale,
-		  	movies : aResults.results
-		  });
+		mdb.searchMovie({query: aRequest.params.search  }, function(aError, aResults) {
+			var vm = {
+		  	searchView 		: true,
+		  	searchable 		: true,
+		  	searchResults : true,
+		  	user 					: aRequest.user || null,
+		  	lang					: locale,
+		  	movies 				: aResults.results
+		  };
+
+		  return aResponse.render('index', vm);
 		});
 	} else {
 		moviesService.searchCollection(aRequest.params.search, 1, limit, function (aError, aResults, aPageCount, aItemCount) {
@@ -31,25 +34,27 @@ router.route('/:location/:search')
 			if (aError) {
 				console.error(aError);
 				return aResponse.render('index', {
-					detailsView: true,
-					lang: locale,
-					movie: movieData,
-					error: aError,
-					count: aItemCount,
-					pagination: pagination,
-					currentPage: 1
+					detailsView 	: true,
+					user 					: aRequest.user || null,
+					lang 					: locale,
+					movie 				: movieData,
+					error 				: aError,
+					count 				: aItemCount,
+					pagination 		: pagination,
+					currentPage 	: 1
 				});
 			}
 
 			return aResponse.render('index', {
-				searchView: true,
-				searchable: true,
-				searchResults: true,
-				lang: locale,
-				movies : aResults,
-				count: aItemCount,
-				pagination: pagination,
-				currentPage: 1
+				searchView 		: true,
+				searchable 		: true,
+				searchResults : true,
+				user 					: aRequest.user || null,
+				lang					: locale,
+				movies 				: aResults,
+				count 				: aItemCount,
+				pagination 		: pagination,
+				currentPage 	: 1
 			});
 		});
 	}
@@ -65,27 +70,34 @@ router.route('/:location/:search/:page')
 .get(function (aRequest, aResponse) {
 	moviesService.searchCollection(aRequest.params.search, aRequest.params.page, limit, function (aError, aResults, aPageCount, aItemCount) {
 		if (aError) {
+			var vm = {
+				detailsView 	: true,
+				user 					: aRequest.user || null,
+				lang					: locale,
+				movie 				: movieData,
+				error 				: aError,
+				count 				: aItemCount,
+				pagination 		: pagination,
+				currentPage 	: aRequest.params.page
+			};
+
 			console.error(aError);
-			return aResponse.render('index', {
-				detailsView: true,
-				lang: locale,
-				movie: movieData,
-				error: aError,
-				count: aItemCount,
-				pagination: pagination,
-				currentPage: aRequest.params.page
-			});
+
+			return aResponse.render('index', vm);
 		}
-		return aResponse.render('index', {
-			searchView: true,
-			searchable: true,
-			searchResults: true,
-			lang: locale,
-			movies : aResults,
-			count: aItemCount,
-			pagination: pagination,
-			currentPage: aRequest.params.page
-		});
+		var vm = {
+			searchView 		: true,
+			searchable  	: true,
+			searchResults : true,
+			user 					: aRequest.user || null,
+			lang					: locale,
+			movies 				: aResults,
+			count 				: aItemCount,
+			pagination 		: pagination,
+			currentPage 	: aRequest.params.page
+		};
+
+		return aResponse.render('index', vm);
 	});
 })
 .post(function (aRequest, aResponse) {
