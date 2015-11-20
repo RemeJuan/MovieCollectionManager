@@ -1,35 +1,35 @@
-var passport = require('passport'),
-    passportLocal = require('passport-local'),
-    bcrypt = require('bcrypt-nodejs'),
-    userService = require('../services/user-service');
+var passport        = require('passport'),
+    passportLocal   = require('passport-local'),
+    bcrypt          = require('bcrypt-nodejs'),
+    userService     = require('../services/user-service');
 
 module.exports = function() {
-  passport.use( new passportLocal.Strategy( {usernameField: 'email'}, function(email, password, next) {
-    userService.findUser(email, function(err, user) {
-      if (err) {
-        return next(err);
+  passport.use( new passportLocal.Strategy( {usernameField: 'email'}, function(aEmail, aPassword, aNext) {
+    userService.findUser(aEmail, function(aError, aUser) {
+      if (aError) {
+        return aNext(aError);
       }
-      if(!user) {
-        return next(null, false);
+      if(!aUser) {
+        return aNext(null, false);
       }
-      bcrypt.compare(password, user.password, function(err, same) {
-        if(err) {
-            return next(err);
+      bcrypt.compare(aPassword, aUser.password, function(aError, aMatch) {
+        if(aError) {
+          return aNext(aError);
         }
-        if(!same) {
-            return (null, false);
+        if(!aMatch) {
+          return aNext(null, false);
         }
-        next(null, user);
+        aNext(null, aUser);
       });
     });
   }));
-  passport.serializeUser(function(user, next) {
-      next(null, user.email);
+  passport.serializeUser(function(aUser, aNext) {
+      aNext(null, aUser.email);
   });
 
-  passport.deserializeUser(function(email, next){
-     userService.findUser(email, function(err, user) {
-         next(err, user);
+  passport.deserializeUser(function(aEmail, aNext){
+     userService.findUser(aEmail, function(aError, aUser) {
+         aNext(aError, aUser);
      });
   });
 };

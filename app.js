@@ -9,6 +9,7 @@ var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
 var mongoose = require('mongoose');
 
 var passport = require('passport');
+var passportConfig = require('./auth/passport-config');
 var expressSession = require('express-session');
 var flash = require('connect-flash');
 var connectMongo = require('connect-mongo');
@@ -20,10 +21,12 @@ var search = require('./routes/search-results');
 var wanted = require('./routes/wanted');
 var details = require('./routes/movie-details');
 var login = require('./routes/login');
+var logout = require('./routes/logout');
 var admin = require('./routes/admin');
-// var users = require('./routes/users');
 
 mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/movies-collection'
+
+passportConfig();
 
 mongoose.connect(mongoUri);
 
@@ -63,9 +66,9 @@ app.use('/collection', collection);
 app.use('/search-results', search);
 app.use('/wanted', wanted);
 app.use('/movie-details', details);
-app.use('/login', login);
+app.use('/login', canAccess.isLoggedOut, login);
+app.use('/logout', canAccess.isLoggedIn, logout);
 app.use('/admin', canAccess.isLoggedIn, admin);
-// app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
