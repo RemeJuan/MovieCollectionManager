@@ -8,8 +8,17 @@ var isLoggedIn = function (aRequest, aResponse, aNext)  {
 	}
 
 	return aNext();
-}
+},
+
+isLoggedOut = function (aRequest, aResponse, aNext) {
+	if ( aRequest.isAuthenticated() ) {
+		return aResponse.redirect('/');
+	}
+
+	return aNext();
+};
 
 module.exports = {
-	isLoggedIn		: isLoggedIn
+	isLoggedIn		: isLoggedIn,
+	isLoggedOut		: isLoggedOut
 }
