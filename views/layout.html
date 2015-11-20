@@ -8,7 +8,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<title>{{ lang.global.siteName }}</title>
-	
+
 	{% block head %}
 
 	<!-- Custom CSS -->
@@ -73,9 +73,11 @@
 	    	{% block content %}{% endblock %}
 	    </div>
 	  </main>
+	  {% include 'footer.html' %}
 	</div>
 	</div>
 	{% include 'dialogs/confirm-dialog.html' %}
+
 </body>
 
 {% block scripts %}

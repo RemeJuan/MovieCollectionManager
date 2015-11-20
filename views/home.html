@@ -1,7 +1,3 @@
-{% if movies.length == 0%}
-No results
-{% endif %}
-
 <div class="mdl-card mdl-shadow--2dp mdl-grid movie-home-card">
 	<div class="mdl-card__title">
 	  <h2 class="mdl-card__title-text">{{ lang.homeView.mainHeading }}</h2>
@@ -24,11 +20,20 @@ No results
 	</form>
 </div>
 
+
+{% if movies.length == 0%}
+<div class="mdl-card movie-home-card heading">
+	<div class="mdl-card__title">
+	  <h2 class="mdl-card__title-text">No results, go add some stuff to your collection.</h2>
+	</div>
+</div>
+{% else %}
 <div class="mdl-card movie-home-card heading">
 	<div class="mdl-card__title">
 	  <h2 class="mdl-card__title-text">{{ lang.homeView.secondHeading }}</h2>
 	</div>
 </div>
+{% endif %}
 
 <div class="mdl-grid latest-entries">
 	{% for movie in movies %}
@@ -38,7 +43,7 @@ No results
 					<img id="movie-{{ movie.id }}" src="/images/w92{{movie.poster_path}}" width="92" height="138" />
 				{% elseif movie.poster_path %}
 					<img id="movie-{{ movie.id }}" src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
-				{% else %}	
+				{% else %}
 					<img src="/images/placeholder-thumb.png" width="92" height="138" />
 				{% endif %}
 			</a>

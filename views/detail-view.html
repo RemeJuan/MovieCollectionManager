@@ -5,7 +5,7 @@
 		<img src="/images/w342{{movie.poster_path}}" width="342" height="513" />
 	{% elseif movie.poster_path %}
 		<img src="http://image.tmdb.org/t/p/w342{{movie.poster_path}}" width="342" height="513" />
-	{% else %}	
+	{% else %}
 		<img src="/images/placeholder-full.png" width="342" height="513" />
 	{% endif %}
 	</div>
@@ -13,7 +13,7 @@
 	<form id="single-movie" name="single-movie" method="post" class="content mdl-cell mdl-cell--8-col">
 		<div class="mdl-card__title">
 		  <h2 class="mdl-card__title-text">
-			  {{ movie.title }} 
+			  {{ movie.title }}
 			  <small class="small-heading">{{ movie.tagline }} ({{ movie.release_date | date('Y') }})</small>
 		  </h2>
 		</div>
@@ -21,7 +21,7 @@
 		<div class="mdl-card__supporting-text movie-details">
 		  	<p>
 		  	<small>
-		  		{{ lang.detailsView.labels.genres }}: 
+		  		{{ lang.detailsView.labels.genres }}:
 		  		{% for genre in movie.genres %}
 		  			{% if !loop.first %} , {% endif %}
 		  			{{ genre }}
@@ -45,26 +45,28 @@
 
 		{% include 'collection-details.html' %}
 
+		{% if user %}
 		<div class="cta">
-		<div id="menu" class="flyout-menu">
-		{% if !inCollection %}
-			{% include 'buttons/wanted-button.html' %}
-			{% include 'buttons/add-button.html' %}
-		{% elseif editable %}
-			{% include 'buttons/save-button.html' %}
+			<div id="menu" class="flyout-menu">
+			{% if !inCollection %}
+				{% include 'buttons/wanted-button.html' %}
+				{% include 'buttons/add-button.html' %}
+			{% elseif editable %}
+				{% include 'buttons/save-button.html' %}
+				{% include 'buttons/delete-button.html' %}
+				{% include 'buttons/cancel-button.html' %}
+			{% elseif movie.collection_wanted %}
+				{% include 'buttons/move-button.html' %}
+				{% include 'buttons/delete-button.html' %}
+				{% include 'buttons/cancel-button.html' %}
+			{% else %}
 			{% include 'buttons/delete-button.html' %}
-			{% include 'buttons/cancel-button.html' %}
-		{% elseif movie.collection_wanted %}
-			{% include 'buttons/move-button.html' %}
-			{% include 'buttons/delete-button.html' %}
-			{% include 'buttons/cancel-button.html' %}
-		{% else %}
-		{% include 'buttons/delete-button.html' %}
-			{% include 'buttons/edit-button.html' %}
-		{% endif %}
-		</div>
+				{% include 'buttons/edit-button.html' %}
+			{% endif %}
+			</div>
 			{% include 'buttons/menu-button.html' %}
 		</div>
+		{% endif %}
 	</form>
 </div>
 <div class="error-message">

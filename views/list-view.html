@@ -1,13 +1,9 @@
-{% if movies.length == 0 %}
-No results
-{% endif %}
-
 {% if searchResults %}
 	{% set pageHeading = lang.global.searchResults %}
 {% elseif collection %}
 	{% set pageHeading = lang.global.myCollection %}
 {% elseif wanted %}
-	{% set pageHeading = lang.global.wantedCollection %}	
+	{% set pageHeading = lang.global.wantedCollection %}
 {% endif %}
 
 <div class="mdl-card movie-search-card heading">
@@ -15,6 +11,14 @@ No results
 	  <h2 class="mdl-card__title-text">{{ pageHeading }}</h2>
 	</div>
 </div>
+
+{% if movies.length == 0 %}
+<div class="mdl-card movie-home-card heading">
+	<div class="mdl-card__title">
+	  <h2 class="mdl-card__title-text">No results, go add some stuff to your collection.</h2>
+	</div>
+</div>
+{% endif %}
 
 {% for movie in movies %}
 <div class="mdl-card mdl-shadow--2dp mdl-grid movie-search-card">
@@ -25,7 +29,7 @@ No results
 				<img src="/images/w92{{movie.poster_path}}" width="92" height="138" />
 			{% elseif movie.poster_path %}
 				<img src="http://image.tmdb.org/t/p/w92{{movie.poster_path}}" width="92" height="138" />
-			{% else %}	
+			{% else %}
 				<img src="/images/placeholder-thumb.png" width="92" height="138" />
 			{% endif %}
 		</a>
@@ -60,9 +64,9 @@ No results
 			  	  	{% else %}
 			  		  	<small class="tag">{{ lang.tags.unLocation }}</small>
 			  		{% endif %}
-			  	</span>			  	
+			  	</span>
 			  	<span class="list">
-			  		
+
 			  	  	{% if movie.collection_quality %}
 			  	  	<a href="/collection/tags/quality/{{ movie.collection_quality.quality }}">
 			  	  		<small class="tag tag-yellow">{{ movie.collection_quality.quality }}</small>
@@ -70,7 +74,7 @@ No results
 			  	  	{% else %}
 			  		  	<small class="tag">{{ lang.tags.unQuality }}</small>
 			  		{% endif %}
-			  		
+
 			  	</span>
 			</div>
 			{% endif %}
@@ -91,8 +95,8 @@ No results
 </div>
 {% endfor %}
 
-{% if pagination.length > 0 %}
-<div class="pagination  mdl-cell mdl-cell--12-col">Page: 
+{% if pagination.length > 1 %}
+<div class="pagination  mdl-cell mdl-cell--12-col">Page:
 {% for page in pagination %}
 	{% if page == currentPage %}
 		{{ page }} {% if !loop.last %} | {% endif %}

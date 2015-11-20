@@ -12,12 +12,14 @@ var passport = require('passport');
 var expressSession = require('express-session');
 var flash = require('connect-flash');
 var connectMongo = require('connect-mongo');
+var canAccess = require('./auth/restrict');
 
 var index = require('./routes/index');
 var collection = require('./routes/collection');
 var search = require('./routes/search-results');
 var wanted = require('./routes/wanted');
 var details = require('./routes/movie-details');
+var login = require('./routes/login');
 var admin = require('./routes/admin');
 // var users = require('./routes/users');
 
@@ -61,7 +63,8 @@ app.use('/collection', collection);
 app.use('/search-results', search);
 app.use('/wanted', wanted);
 app.use('/movie-details', details);
-app.use('/admin', admin);
+app.use('/login', login);
+app.use('/admin', canAccess.isLoggedIn, admin);
 // app.use('/users', users);
 
 // catch 404 and forward to error handler

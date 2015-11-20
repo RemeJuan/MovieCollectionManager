@@ -1,6 +1,15 @@
-module.exports = function(req, res, next) {
-	if( req.isAuthenticated() ) {
-        return next();
-    }
-    res.redirect('/login');
-};
+'use-strict';
+
+var isLoggedIn = function (aRequest, aResponse, aNext)  {
+	if ( !aRequest.isAuthenticated() ) {
+		aRequest.session.returnTo = aRequest.originalUrl;
+
+		return aResponse.redirect('/login');
+	}
+
+	return aNext();
+}
+
+module.exports = {
+	isLoggedIn		: isLoggedIn
+}
