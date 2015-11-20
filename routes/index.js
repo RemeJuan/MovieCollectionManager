@@ -13,23 +13,20 @@ var movieData, location, limit = 10, pagination = [],
 	imgDir = 'public/images/w342/',
 	thumbDir = 'public/images/w92/';
 
-router.use(session({
-	secret: 'keyboard cowboy',
-	resave: false,
-	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
-}));
 router.use(flash());
 
 /* GET home page. */
 router.route('/')
 .get(function (aRequest, aResponse) {
 	moviesService.getAllMovies({}, function (aError, aMovies) {
-		return aResponse.render('index', {
-			homeView: true,
-			lang: locale,
-			movies : aMovies
-		});
+		var vm = {
+			homeView 	: true,
+			user 			: aRequest.user || null,
+			lang			: locale,
+			movies 		: aMovies
+		};
+
+		return aResponse.render('index', vm);
 	});
 })
 .post(function (aRequest, aResponse) {
@@ -43,15 +40,19 @@ router.route('/delete/:id')
 .get(function (aRequest, aResponse) {
 	moviesService.deleteTitle(aRequest.params.id, function (aError, aResults) {
 		if (aError) {
+			var vm = {
+				detailsView		: true,
+				inCollection	: true,
+				editable			: true,
+				user 					: aRequest.user || null,
+				lang 					: locale,
+				movie 				: aResults,
+				error 				: aError
+			};
+
 			aRequest.flash('error', 'Entry not deleted');
-			return aResponse.render('index', {
-				detailsView: true,
-				inCollection: true,
-				editable: true,
-				lang: locale,
-				movie: aResults,
-				error: aError
-			});
+
+			return aResponse.render('index', vm);
 		}
 
 		aRequest.flash('success', 'Entry sucessfully deleted');

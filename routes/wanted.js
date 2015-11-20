@@ -9,32 +9,29 @@ var session = require('express-session');
 
 var movieData, limit = 10, pagination = [];
 
-router.use(session({
-	secret: 'keyboard cowboy',
-	resave: false,
-	saveUninitialized: true,
-	cookie: { maxAge: 60000 }
-}));
 router.use(flash());
 
 router.route('/')
 .get(function (aRequest, aResponse) {
 	moviesService.getAllWanted({}, 1, limit, function (aError, aMovies, aPageCount, aItemCount) {
-		var pagination = [];
+		var pagination = [], vm;
 		for (i = 1; i <= aPageCount; i++) {
 			pagination.push(i);
 		}
 
-		return aResponse.render('index', {
-			searchView: true,
-			searchable: true,
-			wanted: true,
-			lang: locale,
-			movies : aMovies,
-			count: aItemCount,
-			pagination: pagination,
-			currentPage: 1
-		});
+		vm = {
+			searchView 		: true,
+			searchable 		: true,
+			wanted 				: true,
+			user 					: aRequest.user || null,
+			lang 					: locale,
+			movies 				: aMovies,
+			count 				: aItemCount,
+			pagination 		: pagination,
+			currentPage 	: 1
+		}
+
+		return aResponse.render('index', vm);
 	});
 })
 .post(function (aRequest, aResponse) {
@@ -47,16 +44,19 @@ router.route('/')
 router.route('/:page')
 .get(function (aRequest, aResponse) {
 	moviesService.getAllWanted({}, aRequest.params.page, limit, function (aError, aMovies, aCount) {
-		return aResponse.render('index', {
-			searchView: true,
-			searchable: true,
-			wanted: true,
-			lang: locale,
-			movies : aMovies,
-			count: aCount,
-			pagination: pagination,
-			currentPage: aRequest.params.page
-		});
+		var vm = {
+			searchView 	: true,
+			searchable	: true,
+			wanted 			: true,
+			user 				: aRequest.user || null,
+			lang 				: locale,
+			movies 			: aMovies,
+			count 			: aCount,
+			pagination	: pagination,
+			currentPage : aRequest.params.page
+		};
+
+		return aResponse.render('index', vm);
 	});
 })
 .post(function (aRequest, aResponse) {
@@ -71,10 +71,10 @@ router.route('/add/:id')
 	mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults){
 		movieData = aResults;
 		movieData.wanted = true;
-		
+
 		moviesService.addMovie(movieData, {}, function (aError, aMovie) {
 			if (aError) {
-				
+
 				aRequest.flash('error', 'Entry not added to wanted list');
 
 				return aResponse.redirect('/movie-details/' + aRequest.params.id);
@@ -98,7 +98,7 @@ router.route('/move/:id')
 		}
 
 		aRequest.flash('success', 'Entry sucessfully moved to collection');
-		
+
 		return aResponse.redirect('/movie-details/' + aRequest.params.id + '/edit');
 	})
 });
