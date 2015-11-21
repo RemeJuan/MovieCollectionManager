@@ -82,7 +82,14 @@ router.route('/:collection/delete/:entry')
 router.route('/updateuser')
 .post(function(aRequest, aResponse) {
 	userService.updateUser(aRequest.user._id, aRequest.body, function(aError, aResult) {
+		if (aError) {
+			console.error(aError);
+			aRequest.flash('error', 'Update failed');
+		} else {
+			aRequest.flash('success', 'Update successful');
+		};
 
+		return aResponse.redirect('/admin');
 	});
 });
 
