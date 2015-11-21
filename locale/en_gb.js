@@ -7,6 +7,7 @@ var locale = {
 		unknown: 'Unknown',
 		searchCollection: 'Search Collection',
 		administration: 'Collection Administration',
+		account: 'Account Administration',
 		myCollection: 'Movie Collection',
 		wantedCollection: 'Wanted movies'
 	},
@@ -48,7 +49,12 @@ var locale = {
 	adminView: {
 		headingLocations: 'Media locations',
 		headingQualities: 'Media qualities',
-		headingTypes: 'Media Types'
+		headingTypes: 'Media types',
+		headingAccount: 'Update details',
+		name: 'Name',
+		email: 'E-Mail address',
+		password: 'Password',
+		conPassword: 'Confirm Password'
 	},
 	navigation: {
 		home: 'Home',
