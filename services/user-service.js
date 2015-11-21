@@ -1,5 +1,6 @@
-var bcrypt = require('bcrypt-nodejs'),
-		User = require('../models/users-model').Users;
+var bcrypt 	= require('bcrypt-nodejs'),
+		User 		= require('../models/users-model').Users,
+		async 	= require('async');
 
 exports.findUser = function(aEmail, aNext) {
   User.findOne(
@@ -12,32 +13,49 @@ exports.findUser = function(aEmail, aNext) {
 };
 
 exports.updateUser = function(uId, aData, aNext) {
-	var userModel = {
-		name: aData.name,
-		email: aData.email
-	};
+	async.waterfall([
+		function(aDone) {
+			var userModel;
 
-	if(aData.password) {
-		bcrypt.hash(aData.password, null, null, function(aError, aHash) {
-		  if(aError) {
-		    return aNext(aError);
-		  }
-		  userModel.password = aHash;
-		});
-	}
+			if(aData.password) {
+				bcrypt.hash(aData.password, null, null, function(aError, aHash) {
+				  if(aError) {
+				    return aNext(aError);
+				  }
+				  userModel = {
+			  		name: aData.name,
+			  		email: aData.email,
+			  		password: aHash
+			  	}
+			  	return aDone(null, userModel);
+				});
+			}
+			else {
+			  userModel = {
+		  		name: aData.name,
+		  		email: aData.email
+		  	}
+		  	return aDone(null, userModel);
+			};
+		},
+		function(userModel, aDone) {
+			User.update(
+			{
+				_id: uId
+			},
+			userModel,
+			function(aError, aAffected) {
+				if (aError) {
+					console.log('error', aError);
+					return aNext(aError);
+				};
 
-	User.findOne(
-	{
-		_id: uId
-	},
-	userModel,
-	function(aError, aAffected, aResponse, aUser) {
-		if (aError) {
-			console.log('error', aError);
-			return aNext(aError);
-		};
-
-		return aNext(null, aUser);
+				return aDone(null);
+			});
+		}
+	], function(aError) {
+	  if (aError) return aNext(aError);
+	  return aNext(null);
 	});
 }
 
@@ -49,7 +67,7 @@ exports.setupDefault = function(aNext) {
 			var defaultUser = User({
 			  name: 'Admin User',
 			  email: 'admin@admin',
-			  password: 'password'
+			  password: '$2a$10$h/ZkJFAjUYGPsJYAILVbjOnfsuyDX5YU/SNeLZbCy.SzKWsgPHNIC'
 			});
 			// save the user
 			defaultUser.save(function(aError) {
