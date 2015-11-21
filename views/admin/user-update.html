@@ -1,25 +1,34 @@
-<div class="mdl-card mdl-shadow--2dp mdl-grid login-card">
+<div class="mdl-card mdl-shadow--2dp mdl-grid update-card">
 	<div class="mdl-card__title">
-	  <h2 class="mdl-card__title-text">{{ lang.loginView.title }}</h2>
+	  <h2 class="mdl-card__title-text">{{ lang.adminView.headingAccount }}</h2>
 	</div>
 
-	<form id="login" name="login" method="post" class="mdl-grid">
+	<form id="login" name="login" method="post" action="/admin/updateuser" class="mdl-grid">
 		<div class="mdl-cell mdl-cell--12-col">
+
 			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-				<input class="mdl-textfield__input" type="email" id="email" name="email" required/>
-				<label class="mdl-textfield__label" for="email">{{ lang.loginView.email }}</label>
+				<input class="mdl-textfield__input" type="text" id="name" name="name" value="{{user.name}}" required/>
+				<label class="mdl-textfield__label" for="name">{{ lang.adminView.name }}</label>
 			</div>
 
 			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-				<input class="mdl-textfield__input" type="password" id="password" name="password" required/>
-				<label class="mdl-textfield__label" for="password">{{ lang.loginView.password }}</label>
+				<input class="mdl-textfield__input" type="email" id="email" name="email" value="{{user.email}}" required/>
+				<label class="mdl-textfield__label" for="email">{{ lang.adminView.email }}</label>
+			</div>
+
+			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<input class="mdl-textfield__input" type="password" id="password" name="password" onchange="form.conPassword.pattern = this.value;"/>
+				<label class="mdl-textfield__label" for="password">{{ lang.adminView.password }}</label>
+			</div>
+
+			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<input class="mdl-textfield__input" type="password" id="conPassword" name="conPassword"/>
+				<label class="mdl-textfield__label" for="conPassword">{{ lang.adminView.conPassword }}</label>
 			</div>
 
 			<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-			  {{ lang.loginView.submit }}
+			  {{ lang.global.saveButt }}
 			</button>
-
-			<a href="/forgot">{{ lang.loginView.forgotPassword }}</a>
 		</div>
 	</form>
 </div>
