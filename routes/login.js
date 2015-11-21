@@ -3,7 +3,8 @@ var express 	= require('express'),
 		locale 		= require('../locale/en_gb'),
 		passport 	= require('passport'),
 		flash = require('connect-flash'),
-		session 	= require('express-session');
+		session 	= require('express-session'),
+		userService = require('../services/user-service');
 
 var movieData,
 	imgDir = 'public/images/w342/',
@@ -15,6 +16,8 @@ router.route('/')
 .get(function (aRequest, aResponse) {
 	var flashSuccess = aRequest.flash('success'),
 		flashError = aRequest.flash('error');
+
+	userService.setupDefault();
 
 	var vm =  {
 		loginView	: true,
