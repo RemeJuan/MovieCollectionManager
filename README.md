@@ -40,6 +40,14 @@ Ensure Mongo is running
 
 ## Change Log
 
+v0.9.1:
+* Futher updated the auth abilities:
+  * Default user acount setup on app launch if 0 users found in DB.
+  * Admin section updates for user detail management.
+    * Password only updated if the password field is completed.
+
+Default auth details are currently admin@admin / admin.
+
 v0.9.0:
 * Initial user access controls.
   * Login and basic User Access controls setup

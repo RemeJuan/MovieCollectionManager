@@ -1,0 +1,39 @@
+<div class="mdl-card mdl-shadow--2dp admin-card locations">
+	<div class="mdl-card__title">
+	  	<h2 class="mdl-card__title-text">{{ lang.adminView.headingLocations }}</h2>
+	</div>
+	{% for loc in admin.locations %}
+	<form action="/admin/locations/update" method="post">
+	  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	    <input class="mdl-textfield__input" type="text" id="{{ loc._id|safe }}" name="location" value="{{ loc.location }}" />
+	    <input name="id" type="hidden" value="{{ loc._id|safe }}">
+	    <label class="mdl-textfield__label" for="{{ loc._id|safe }}">Location</label>
+	  </div>
+	  <button id="button-{{ loc._id|safe }}-new" type="submit" class="mdl-button mdl-js-button mdl-button--icon">
+	    <i class="material-icons">save</i>
+	  </button>
+	  <div class="mdl-tooltip" for="button-{{ loc._id|safe }}-new">
+	  	Update record
+	  </div>
+	  <a id="button-{{ loc._id|safe }}-delete" class="mdl-button mdl-js-button mdl-button--icon" href="/admin/locations/delete/{{ loc._id|safe }}">
+	    <i class="material-icons">remove</i>
+	  </a>
+	  <div class="mdl-tooltip" for="button-{{ loc._id|safe }}-delete">
+	  	Delete
+	  </div>
+	</form>
+	{% endfor %}
+	<form action="/admin/locations/save" method="post">
+	  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	    <input class="mdl-textfield__input" type="text" id="{{ loc._id|safe }}" name="location" />
+	    <input name="id" type="hidden" value="">
+	    <label class="mdl-textfield__label" for="{{ loc._id|safe }}">New Location</label>
+	  </div>
+	  <button id="button-{{ loc._id|safe }}-new" type="submit" class="mdl-button mdl-js-button mdl-button--icon">
+	    <i class="material-icons">add</i>
+	  </button>
+	  <div class="mdl-tooltip" for="button-{{ loc._id|safe }}-new">
+	  	Add new record
+	  </div>
+	</form>
+</div>

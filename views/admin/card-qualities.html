@@ -1,0 +1,39 @@
+<div class="mdl-card mdl-shadow--2dp admin-card qualities">
+	<div class="mdl-card__title">
+	  	<h2 class="mdl-card__title-text">{{ lang.adminView.headingQualities }}</h2>
+	</div>
+	{% for qual in admin.qualities %}
+	<form action="/admin/qualities/save" method="post">
+	  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	    <input class="mdl-textfield__input" type="text" id="{{ qual._id|safe }}" name="quality" value="{{ qual.quality }}" />
+	    <input name="id" type="hidden" value="{{ qual._id|safe }}">
+	    <label class="mdl-textfield__label" for="{{ qual._id|safe }}">Quality</label>
+	  </div>
+	  <button id="button-{{ qual._id|safe }}-new" type="submit" class="mdl-button mdl-js-button mdl-button--icon">
+	    <i class="material-icons">save</i>
+	  </button>
+	  <div class="mdl-tooltip" for="button-{{ qual._id|safe }}-new">
+	  	Update record
+	  </div>
+	  <a id="button-{{ qual._id|safe }}-delete" class="mdl-button mdl-js-button mdl-button--icon" href="/admin/qualities/delete/{{ qual._id|safe }}">
+	    <i class="material-icons">remove</i>
+	  </a>
+	  <div class="mdl-tooltip" for="button-{{ qual._id|safe }}-delete">
+	  	Delete
+	  </div>
+	</form>
+	{% endfor %}
+	<form action="/admin/qualities/save" method="post">
+	  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+	    <input class="mdl-textfield__input" type="text" id="{{ qual._id|safe }}" name="quality" />
+	    <input name="id" type="hidden" value="">
+	    <label class="mdl-textfield__label" for="{{ qual._id|safe }}">New Quality</label>
+	  </div>
+	  <button id="button-{{ qual._id|safe }}-new" type="submit" class="mdl-button mdl-js-button mdl-button--icon">
+	    <i class="material-icons">add</i>
+	  </button>
+	  <div class="mdl-tooltip" for="button-{{ qual._id|safe }}-new">
+	  	Add new record
+	  </div>
+	</form>
+</div>

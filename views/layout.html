@@ -21,7 +21,7 @@
 
 <body>
 	<div id="container">
-	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
 	  <header class="mdl-layout__header">
 	    <div class="mdl-layout__header-row">
 	      <!-- Title -->
@@ -60,6 +60,12 @@
 	        </button>
 	      </div>
 	    </div>
+	    {% if adminView %}
+	    <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+	      <a href="#collection-tab" class="mdl-layout__tab is-active">{{ lang.global.administration }}</a>
+	      <a href="#account-tab" class="mdl-layout__tab">{{ lang.global.account }}</a>
+	    </div>
+	    {% endif %}
 	  </header>
 
 	  <div class="mdl-layout__drawer">

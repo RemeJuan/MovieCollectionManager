@@ -24,6 +24,8 @@ var login = require('./routes/login');
 var logout = require('./routes/logout');
 var admin = require('./routes/admin');
 
+var userService = require('./services/user-service');
+
 mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/movies-collection'
 
 passportConfig();
@@ -60,6 +62,8 @@ app.use(expressSession(
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
+userService.setupDefault();
 
 app.use('/', index);
 app.use('/collection', collection);
