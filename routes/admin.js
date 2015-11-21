@@ -1,17 +1,18 @@
-var express = require('express');
-var router = express.Router();
-var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
-var http = require('http');
-var moviesService = require('../services/movies-service');
-var locale = require('../locale/en_gb');
-var downloader = require('downloader');
-var fs = require('fs-extra');
-var flash = require('connect-flash');
-var session = require('express-session');
+var express 				= require('express'),
+		router 					= express.Router(),
+		mdb 						= require('moviedb')('1046d0e8bf3b7860228747333688b85d'),
+		http 						= require('http'),
+		moviesService 	= require('../services/movies-service'),
+		userService 		= require('../services/user-service'),
+		locale 					= require('../locale/en_gb'),
+		downloader 			= require('downloader'),
+		fs 							= require('fs-extra'),
+		flash 					= require('connect-flash'),
+		session 				= require('express-session'),
 
-var movieData, location, limit = 10, pagination = [], messageSent,
-	imgDir = 'public/images/w342/',
-	thumbDir = 'public/images/w92/';
+		movieData, location, limit = 10, pagination = [], messageSent,
+		imgDir = 'public/images/w342/',
+		thumbDir = 'public/images/w92/';
 
 router.use(flash());
 
@@ -75,6 +76,13 @@ router.route('/:collection/delete/:entry')
 		};
 
 		return aResponse.redirect('/admin');
+	});
+});
+
+router.route('/updateuser')
+.post(function(aRequest, aResponse) {
+	userService.updateUser(aRequest.user._id, aRequest.body, function(aError, aResult) {
+
 	});
 });
 
