@@ -42,19 +42,15 @@ exports.updateUser = function(uId, aData, aNext) {
 }
 
 exports.setupDefault = function(aNext) {
-	User.findOne(
-	{
-		email: 'admin@admin'
-	},
+	User.find({},
 	function(aError, aUser) {
-		if(!aUser) {
+		if(aUser.length === 0) {
 			// create a default user
 			var defaultUser = User({
 			  name: 'Admin User',
 			  email: 'admin@admin',
 			  password: 'password'
 			});
-
 			// save the user
 			defaultUser.save(function(aError) {
 			  if (aError) aNext(aError);
