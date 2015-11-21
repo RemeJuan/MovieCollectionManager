@@ -50,7 +50,9 @@ router.route('/:id')
 
 		if (!aResults.movie) {
 			mdb.movieInfo({id: aRequest.params.id  }, function(aError, aResults) {
-				var vm = {
+				var vm;
+				movieData = aResults;
+				vm = {
 					detailsView	: true,
 					user 				: aRequest.user || null,
 					lang				: locale,
@@ -59,8 +61,6 @@ router.route('/:id')
 					success 		: flashSuccess,
 					error 			: flashError
 				};
-
-				movieData = aResults;
 
 				return aResponse.render('index', vm);
 			});
