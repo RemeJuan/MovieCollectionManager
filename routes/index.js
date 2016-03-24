@@ -4,7 +4,6 @@ var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
 var http = require('http');
 var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
-var downloader = require('downloader');
 var fs = require('fs-extra');
 var flash = require('connect-flash');
 var session = require('express-session');
