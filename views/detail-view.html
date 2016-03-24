@@ -24,7 +24,7 @@
 		  		{{ lang.detailsView.labels.genres }}:
 		  		{% for genre in movie.genres %}
 		  			{% if !loop.first %} , {% endif %}
-		  			{{ genre.name }}
+		  			{% if !genre.name %} {{ genre }} {% else %} {{ genre.name }} {% endif %}
 		  		{% endfor %}
 		  		| {{ lang.detailsView.labels.runtime }}: {{ movie.runtime }} min
 		  		| {{ lang.detailsView.labels.location }}: {{ movie.vote_average }} {{ lang.detailsView.labels.from }} {{ movie.vote_count }} {{ lang.detailsView.labels.votes }}
