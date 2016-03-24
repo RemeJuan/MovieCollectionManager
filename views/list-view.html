@@ -81,9 +81,7 @@
 		  	<div class="list list-genres">
 			  	{% for genre in movie.genres %}
 			  		<a href="/collection/tags/genre/{{ genre.name }}">
-			  			<small class="tag tag-blue">
-			  				{% if !genre.name %} {{ genre }} {% else %} {{ genre.name }} {% endif %}
-			  			</small>
+			  			<small class="tag tag-blue">{{ genre }}</small>
 			  		</a>
 			  	{% endfor %}
 		  	</div>
