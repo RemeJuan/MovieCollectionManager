@@ -26,7 +26,7 @@ var admin = require('./routes/admin');
 
 var userService = require('./services/user-service');
 
-mongoUri = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/movies-collection'
+mongoUri = process.env.MONGOLAB_URI || 'mongodb://mymoviecollection:mymoviecollection123@ds041693.mongolab.com:41693/my-movie-collection'
 
 passportConfig();
 
