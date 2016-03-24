@@ -4,7 +4,6 @@ var mdb = require('moviedb')('1046d0e8bf3b7860228747333688b85d');
 var http = require('http');
 var moviesService = require('../services/movies-service');
 var locale = require('../locale/en_gb');
-var downloader = require('downloader');
 var fs = require('fs-extra');
 var flash = require('connect-flash');
 var session = require('express-session');
@@ -25,26 +24,40 @@ router.route('/:id')
 
 		if (movieData) {
 			if(!aResults.movie.local_img) {
-				fs.mkdirs(imgDir, function (err) {
-				  if (err) return console.error(err);
 
-				  	downloader.download('http://image.tmdb.org/t/p/w342' + movieData.poster_path, imgDir);
-				  	downloader.on('done', function (aResponse) {
-				  		moviesService.updateImg(aRequest.params.id, function (aError, aResults) {});
-				  	});
-				})
+				(function(cb) {
+					var file = fs.createWriteStream(imgDir + movieData.poster_path),
+							url = 'http://image.tmdb.org/t/p/w342' + movieData.poster_path,
+
+							request = http.get(url, function(res) {
+								res.pipe(file);
+								file.on('finish', function() {
+									file.close(cb);
+								});
+							})
+							.on('error', function(err) {
+								fs.unlink(dest);
+								if (cb) cb(err.message);
+							});
+				})();
 			}
 
 			if (!aResults.movie.local_thumb) {
-				fs.mkdirs(thumbDir, function (err) {
-				  if (err) return console.error(err);
+				(function(cb) {
+					var file = fs.createWriteStream(thumbDir + movieData.poster_path),
+							url = 'http://image.tmdb.org/t/p/w92' + movieData.poster_path,
 
-				  	downloader.download('http://image.tmdb.org/t/p/w92' + movieData.poster_path, thumbDir);
-				  	downloader.on('done', function (aResponse) {
-				  		moviesService.updateThumb(aRequest.params.id, function (aError, aResults) {});
-				  	});
-				})
-
+							request = http.get(url, function(res) {
+								res.pipe(file);
+								file.on('finish', function() {
+									file.close(cb);
+								});
+							})
+							.on('error', function(err) {
+								fs.unlink(dest);
+								if (cb) cb(err.message);
+							});
+				})();
 			}
 		}
 
