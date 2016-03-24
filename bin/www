@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('movie-collection:server');
 var http = require('http');
+var fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
@@ -28,6 +29,15 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+
+if (!fs.existsSync('public/images/w342/')){
+    fs.mkdirSync('public/images/w342/');
+}
+
+if (!fs.existsSync('public/images/w92/')){
+    fs.mkdirSync('public/images/w92/');
+}
 
 /**
  * Normalize a port into a number, string, or false.
